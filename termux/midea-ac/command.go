@@ -328,7 +328,10 @@ func (a ApplianceResponse) IndoorTemperature() float64 {
 }
 
 func (a ApplianceResponse) OutdoorTemperature() float64 {
-	return float64(a.Data[0x0c]-50) / 2
+	if a.Data[0x0c] != 0xff {
+		return float64(a.Data[0x0c]-50) / 2
+	}
+	return 0xff
 }
 
 func getBits(pByte, pIndex byte) byte {
