@@ -1,20 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os/exec"
 
 	ma "jojo-live/midea-ac"
 
 	tm "github.com/eternal-flame-AD/go-termux"
 )
 
+func Mpv(url string) error {
+	mpv := exec.Command("mpv", url)
+	err := mpv.Start()
+	return err
+}
+
 func main() {
+
+	Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
 
 	if stat, err := tm.BatteryStatus(); err != nil {
 		panic(err)
 	} else {
-		fmt.Printf("The current battery percentage is %d%%.\n", stat.Percentage)
+		log.Println(stat.Health, stat.Percentage, stat.Status, stat.Temperature)
 	}
 
 	device := ma.NewDevice("192.168.2.217", 162727724063545, "6444")
