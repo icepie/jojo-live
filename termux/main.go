@@ -2,9 +2,14 @@ package main
 
 import (
 	"jojo-live/client"
+	"time"
 
 	tm "github.com/eternal-flame-AD/go-termux"
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	indoorTemperature float64
 )
 
 type Battery struct {
@@ -20,7 +25,16 @@ type Status struct {
 	IndoorTemperature float64
 }
 
+func updateIndoorTemperature() {
+	for {
+		indoorTemperature, _ = client.GetMaAcIndoorTemperature()
+		time.Sleep(10 * time.Second)
+	}
+}
+
 func main() {
+
+	go updateIndoorTemperature()
 
 	// gin
 
@@ -34,7 +48,7 @@ func main() {
 			status.LightPower = lightStatus.Result[0].(string) == "on"
 		}
 
-		status.IndoorTemperature, _ = client.GetMaAcIndoorTemperature()
+		status.IndoorTemperature = indoorTemperature
 
 		if stat, err := tm.BatteryStatus(); err == nil {
 			status.Battery.BatteryPercentage = stat.Percentage
