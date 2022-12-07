@@ -132,10 +132,10 @@ onMounted(() => {
             <div>充电状态: {{ status?.Battery.BatterISCharging ? '是' : '否' }}</div>
           </div>
           <div class="flex flex-row" justify-between>
-            <div>设备温度: {{ status?.Battery.BatteryTemperature.toFixed(2) }}°C </div>
+            <div>设备温度: {{ status?.Battery.BatteryTemperature.toFixed(2) }} °C </div>
           </div>
           <div class="flex flex-row">
-            <div>室内温度: {{ status?.IndoorTemperature }}°C </div>
+            <div>室内温度: {{ status?.IndoorTemperature }} °C </div>
           </div>
         </div>
 
