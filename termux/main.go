@@ -1,12 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	ma "jojo-live/midea-ac"
+
+	tm "github.com/eternal-flame-AD/go-termux"
 )
 
 func main() {
+
+	if stat, err := tm.BatteryStatus(); err != nil {
+		panic(err)
+	} else {
+		fmt.Printf("The current battery percentage is %d%%.\n", stat.Percentage)
+	}
 
 	device := ma.NewDevice("192.168.2.217", 162727724063545, "6444")
 
@@ -17,8 +26,5 @@ func main() {
 
 	ac := ma.NewAirConditioningDevice(device)
 
-	ac.Refresh()
-
-	log.Println(ac.IndoorTemperature(), ac.Outdoortemperature())
-
+	log.Println(ac.IndoorTemperature(), ac.Outdoortemperature(), ac.PowerState(), ac.SwingMode(), ac.FanSpeed(), ac.TurboMode())
 }
