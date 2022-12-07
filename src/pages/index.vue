@@ -91,10 +91,20 @@ const initValineComment = (() => {
   })
 })
 
+const getStatusTimer = ref(null)
+
 onMounted(() => {
   initVideoPlayer()
   initValineComment()
-  getStatus()
+
+  // 定时获取状态
+  getStatusTimer.value = setInterval(async () => {
+    await getStatus()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(getStatusTimer.value)
 })
 
 
