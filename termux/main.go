@@ -5,6 +5,7 @@ import (
 	"time"
 
 	tm "github.com/eternal-flame-AD/go-termux"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,6 +40,9 @@ func main() {
 	// gin
 
 	r := gin.Default()
+
+	// CORS middleware
+	r.Use(cors.Default())
 
 	r.GET("/status", func(c *gin.Context) {
 		var status Status

@@ -5,9 +5,27 @@ import Flv from 'flv.js'
 
 import Valine from "valine";
 
+import axios from 'axios'
+
 defineOptions({
   name: 'IndexPage',
 })
+
+const turnOnLight = () => {
+  axios.get('https://jojos.singzer.cn/light/on')
+}
+
+const turnOffLight = () => {
+  axios.get('https://jojos.singzer.cn/light/off')
+}
+
+const call = () => {
+  axios.get('https://jojos.singzer.cn/call')
+}
+
+const getStatus = () => {
+  axios.get('https://jojos.singzer.cn/status')
+}
 
 // const name = $ref('')
 // const router = useRouter()
@@ -92,15 +110,15 @@ onMounted(() => {
     <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
       <div>
-        <button class="m-3 text-sm btn" disabled>
+        <button class="m-3 text-sm btn" @click="turnOnLight">
           开灯
         </button>
 
-        <button class="m-3 text-sm btn" disabled>
+        <button class="m-3 text-sm btn" @click="turnOffLight" >
           关灯
         </button>
 
-        <button class="m-3 text-sm btn" disabled>
+        <button class="m-3 text-sm btn" @click="call">
           呼叫
         </button>
       </div>

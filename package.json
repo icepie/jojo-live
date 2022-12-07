@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^9.6.0",
+    "axios": "^1.2.1",
     "flv.js": "^1.6.2",
     "hls.js": "1.2.5-0.canary.8749",
     "valine": "^1.5.1",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.33.1",
     "@iconify-json/carbon": "^1.1.11",
+    "@types/axios": "^0.14.0",
     "@types/node": "^18.11.11",
     "@types/video.js": "7.x",
     "@unocss/reset": "^0.47.5",

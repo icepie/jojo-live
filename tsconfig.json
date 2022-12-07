@@ -16,7 +16,8 @@
     "types": [
       "vite/client",
       "vite-plugin-pages/client",
-      "unplugin-vue-macros/macros-global"
+      "unplugin-vue-macros/macros-global",
+      "@types/axios"
     ],
     "paths": {
       "~/*": ["src/*"]
