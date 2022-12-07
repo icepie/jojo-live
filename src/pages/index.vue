@@ -11,20 +11,26 @@ defineOptions({
   name: 'IndexPage',
 })
 
-const turnOnLight = () => {
-  axios.get('https://jojot.singzer.cn/light/on')
+const turnOnLight = async () => {
+  await axios.get('https://jojot.singzer.cn/light/on')
 }
 
-const turnOffLight = () => {
-  axios.get('https://jojot.singzer.cn/light/off')
+const turnOffLight = async () => {
+  await axios.get('https://jojot.singzer.cn/light/off')
 }
 
-const call = () => {
-  axios.get('https://jojot.singzer.cn/call')
+const call = async () => {
+  await axios.get('https://jojot.singzer.cn/call')
 }
 
-const getStatus = () => {
-  axios.get('https://jojot.singzer.cn/status')
+const status = ref(null)
+
+const getStatus = async () => {
+  const data = await axios.get('https://jojot.singzer.cn/status')
+  if (data.status === 200) {
+    status.value = data.data
+  }
+  console.log(status.value)
 }
 
 // const name = $ref('')
@@ -88,6 +94,7 @@ const initValineComment = (() => {
 onMounted(() => {
   initVideoPlayer()
   initValineComment()
+  getStatus()
 })
 
 
@@ -107,14 +114,40 @@ onMounted(() => {
 
     <div py-1 />
 
+
+
+
     <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
+
+
+
+      <div v-if="status" px-auto mx-auto  py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white justify-center
+        items-start>
+        <div mx-auto>
+          <div class="flex flex-row" justify-between>
+            <div>电池电量: {{ status?.Battery.BatteryPercentage }} %</div>
+          </div>
+          <div class="flex flex-row">
+            <div>充电状态: {{ status?.Battery.BatterISCharging ? '是' : '否' }}</div>
+          </div>
+          <div class="flex flex-row" justify-between>
+            <div>设备温度: {{ status?.Battery.BatteryTemperature.toFixed(2) }}°C </div>
+          </div>
+          <div class="flex flex-row">
+            <div>室内温度: {{ status?.IndoorTemperature }}°C </div>
+          </div>
+        </div>
+
+      </div>
+
+
       <div>
         <button class="m-3 text-sm btn" @click="turnOnLight">
           开灯
         </button>
 
-        <button class="m-3 text-sm btn" @click="turnOffLight" >
+        <button class="m-3 text-sm btn" @click="turnOffLight">
           关灯
         </button>
 
@@ -136,22 +169,22 @@ onMounted(() => {
         <TheInput v-model="name" placeholder="发送弹幕" autocomplete="false" @keydown.enter="go" />
       </div> -->
 
-      <div  py-4/>
-      <text font-bold >如果你有好的想法或者建议</text>
-      <text font-bold >可以在下面评论或者联系我 (wx: oh-icepie)</text>
+      <div py-4 />
+      <text font-bold>如果你有好的想法或者建议</text>
+      <text font-bold>可以在下面评论或者联系我 (wx: oh-icepie)</text>
 
       <div>
 
       </div>
 
-      <div my-5 >
+      <div my-5>
         <div id="vcomments"></div>
       </div>
 
       <span text-gray text-sm font-bold id="/" class="leancloud_visitors" data-flag-title="Your Article Title">
         <text class="post-meta-item-text">访问量: </text>
-        <text  class="leancloud-visitors-count">1000000</text> 次
-     </span>
+        <text class="leancloud-visitors-count">1000000</text> 次
+      </span>
 
     </div>
 
@@ -166,7 +199,6 @@ onMounted(() => {
 </template>
 
 <style>
-
 /* #vcomments .vcards .vcard {
     padding: 15px 20px 0 20px;
     border-radius: 10px;
@@ -183,6 +215,4 @@ onMounted(() => {
     border: none;
     box-shadow: none;
 } */
-
-
 </style>
