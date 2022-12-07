@@ -56,7 +56,7 @@ func main() {
 
 		if stat, err := tm.BatteryStatus(); err == nil {
 			status.Battery.BatteryPercentage = stat.Percentage
-			status.Battery.BatterISCharging = stat.Status == "Charging"
+			status.Battery.BatterISCharging = stat.Status == "PLUGGED"
 			status.Battery.BatteryHealth = stat.Health
 			status.Battery.BatteryTemperature = stat.Temperature
 		}
