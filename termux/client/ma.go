@@ -2,6 +2,7 @@ package client
 
 import (
 	ma "jojo-live/midea-ac"
+	"log"
 )
 
 var (
@@ -20,5 +21,7 @@ func init() {
 	MideaAc := ma.NewAirConditioningDevice(device)
 
 	MideaAc.Refresh()
+
+	log.Println(MideaAc.IndoorTemperature())
 
 }
