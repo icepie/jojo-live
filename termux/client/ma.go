@@ -1,8 +1,8 @@
 package client
 
 import (
+	"errors"
 	ma "jojo-live/midea-ac"
-	"log"
 )
 
 var (
@@ -22,6 +22,14 @@ func init() {
 
 	MideaAc.Refresh()
 
-	log.Println(MideaAc.IndoorTemperature())
+}
 
+func GetMaAcIndoorTemperature() (temperature float64, err error) {
+
+	temperature = MideaAc.IndoorTemperature()
+	if temperature == 0 {
+		err = errors.New("indoor temperature is 0")
+	}
+
+	return
 }
