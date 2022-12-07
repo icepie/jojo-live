@@ -4,6 +4,7 @@ import (
 	"log"
 	"os/exec"
 
+	"jojo-live/client"
 	ma "jojo-live/midea-ac"
 
 	tm "github.com/eternal-flame-AD/go-termux"
@@ -18,6 +19,14 @@ func Mpv(url string) error {
 func main() {
 
 	Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
+
+	// get device info
+	info, err := client.MiLight.Info()
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println(string(info))
 
 	if stat, err := tm.BatteryStatus(); err != nil {
 		panic(err)
