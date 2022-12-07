@@ -184,7 +184,7 @@ func (s *security) Encode8370(data []byte, msgtype byte) []byte {
 			padding = 16 - (size + 2&0xf)
 			size += padding + 32
 			log.Println("padding", padding, "size", size)
-			b := make([]byte, padding)
+			var b []byte
 			rand.Read(b)
 			data = append(data, b...)
 		}
