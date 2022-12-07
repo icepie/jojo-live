@@ -5,11 +5,11 @@ import (
 	ma "jojo-live/midea-ac"
 )
 
-var (
-	MideaAc ma.AirConditioningDevice
-)
+// var (
+// 	MideaAc ma.AirConditioningDevice
+// )
 
-func init() {
+func GetMaAcIndoorTemperature() (temperature float64, err error) {
 
 	device := ma.NewDevice("192.168.2.217", 162727724063545, "6444")
 
@@ -21,10 +21,6 @@ func init() {
 	MideaAc := ma.NewAirConditioningDevice(device)
 
 	MideaAc.Refresh()
-
-}
-
-func GetMaAcIndoorTemperature() (temperature float64, err error) {
 
 	temperature = MideaAc.IndoorTemperature()
 	if temperature == 0 {
