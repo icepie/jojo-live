@@ -12,19 +12,19 @@ defineOptions({
 })
 
 const turnOnLight = () => {
-  axios.get('https://jojos.singzer.cn/light/on')
+  axios.get('https://jojot.singzer.cn/light/on')
 }
 
 const turnOffLight = () => {
-  axios.get('https://jojos.singzer.cn/light/off')
+  axios.get('https://jojot.singzer.cn/light/off')
 }
 
 const call = () => {
-  axios.get('https://jojos.singzer.cn/call')
+  axios.get('https://jojot.singzer.cn/call')
 }
 
 const getStatus = () => {
-  axios.get('https://jojos.singzer.cn/status')
+  axios.get('https://jojot.singzer.cn/status')
 }
 
 // const name = $ref('')
