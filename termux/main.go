@@ -17,6 +17,8 @@ func main() {
 
 	ac := ma.NewAirConditioningDevice(device)
 
-	log.Println(ac.IndoorTemperature())
+	ac.Refresh()
+
+	log.Println(ac.IndoorTemperature(), ac.Outdoortemperature())
 
 }
