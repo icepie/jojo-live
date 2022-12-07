@@ -18,6 +18,10 @@ func Mpv(url string) error {
 
 func main() {
 
+	client.SetMiLightPower(true)
+
+	client.SetMiLightPower(false)
+
 	// c := xiaomiio.NewXiaoMiio("", "")
 	// err := c.Login()
 	// if err != nil {
