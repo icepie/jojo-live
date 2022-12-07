@@ -18,6 +18,26 @@ func Mpv(url string) error {
 
 func main() {
 
+	// c := xiaomiio.NewXiaoMiio("", "")
+	// err := c.Login()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// deviceList, err := c.GetDevices()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// log.Println(deviceList)
+
+	// for _, device := range deviceList {
+
+	// 	if device.Model == "yeelink.light.lamp1" {
+	// 		log.Println(device.Did)
+	// 	}
+	// }
+
 	Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
 
 	client.GetMiLightStatus()

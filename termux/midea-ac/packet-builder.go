@@ -61,7 +61,7 @@ func (p PacketBuilder) Checksum(data []byte) byte {
 
 func (p PacketBuilder) PacketTime() []byte {
 	now := time.Now()
-	t := fmt.Sprintf("%d%02d%02d%02d%02d%06d", now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), now.Nanosecond()/1000)
+	t := fmt.Sprintf("%d%02d%02d%02d%02d%06d", now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 	t = t[:16]
 	// t := fmt.Format("%Y%m%d%H%m%S%f")[:16]
 	var b []byte

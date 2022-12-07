@@ -18,9 +18,31 @@ func GetMiLightStatus() {
 
 	// for get siid and piid, see https://home.miot-spec.com/
 	// get properties
-	getProps, err := MiLight.GetProps(miio.PropParam{
-		Siid: 2,
-		Piid: 1,
+	getProps, err := MiLight.Send("get_prop", []interface{}{"name",
+		"lan_ctrl",
+		"save_state",
+		"delayoff",
+		"music_on",
+		"power",
+		"bright",
+		"color_mode",
+		"rgb",
+		"hue",
+		"sat",
+		"ct",
+		"flowing",
+		"flow_params",
+		"active_mode",
+		"nl_br",
+		"bg_power",
+		"bg_bright",
+		"bg_lmode",
+		"bg_rgb",
+		"bg_hue",
+		"bg_sat",
+		"bg_ct",
+		"bg_flowing",
+		"bg_flow_params",
 	})
 	if err != nil {
 		panic(err)
