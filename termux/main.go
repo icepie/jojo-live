@@ -1,33 +1,65 @@
 package main
 
 import (
-	"log"
-	"os/exec"
-
 	"jojo-live/client"
 
 	tm "github.com/eternal-flame-AD/go-termux"
+	"github.com/gin-gonic/gin"
 )
 
-func Mpv(url string) error {
-	mpv := exec.Command("mpv", url)
-	err := mpv.Start()
-	return err
+type Battery struct {
+	BatteryPercentage  int
+	BatterISCharging   bool
+	BatteryHealth      string
+	BatteryTemperature float64
+}
+
+type Status struct {
+	Battery           Battery
+	LightPower        bool
+	IndoorTemperature float64
 }
 
 func main() {
 
-	client.SetMiLightPower(true)
+	// gin
 
-	Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
+	r := gin.Default()
 
-	client.GetMiLightStatus()
+	r.GET("/status", func(c *gin.Context) {
+		var status Status
 
-	if stat, err := tm.BatteryStatus(); err != nil {
-		panic(err)
-	} else {
-		log.Println(stat.Health, stat.Percentage, stat.Status, stat.Temperature)
-	}
+		lightStatus, err := client.GetMiLightStatus()
+		if err == nil {
+			status.LightPower = lightStatus.Result[0].(string) == "on"
+		}
 
-	log.Println(client.GetMaAcIndoorTemperature())
+		status.IndoorTemperature, _ = client.GetMaAcIndoorTemperature()
+
+		if stat, err := tm.BatteryStatus(); err == nil {
+			status.Battery.BatteryPercentage = stat.Percentage
+			status.Battery.BatterISCharging = stat.Status == "Charging"
+			status.Battery.BatteryHealth = stat.Health
+			status.Battery.BatteryTemperature = stat.Temperature
+		}
+
+		c.JSON(200, status)
+	})
+
+	r.GET("/light/on", func(c *gin.Context) {
+		client.SetMiLightPower(true)
+		c.JSON(200, "ok")
+	})
+
+	r.GET("/light/off", func(c *gin.Context) {
+		client.SetMiLightPower(false)
+		c.JSON(200, "ok")
+	})
+
+	r.GET("/call", func(c *gin.Context) {
+		Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
+		c.JSON(200, "ok")
+	})
+
+	r.Run(":8080")
 }

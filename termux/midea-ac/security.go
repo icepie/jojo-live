@@ -181,10 +181,10 @@ func (s *security) Encode8370(data []byte, msgtype byte) []byte {
 	size, padding := len(data), 0
 	if msgtype == MSGTYPE_ENCRYPTED_RESPONSE || msgtype == MSGTYPE_ENCRYPTED_REQUEST {
 		if (size+2)%16 != 0 {
-			log.Println("padding", padding, "size", size)
+			// log.Println("padding", padding, "size", size)
 			padding = 16 - ((size + 2) & 0xf)
 			size += padding + 32
-			log.Println("padding", padding, "size", size)
+			// log.Println("padding", padding, "size", size)
 			b := make([]byte, padding)
 			rand.Read(b)
 			data = append(data, b...)
