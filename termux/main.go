@@ -20,13 +20,7 @@ func main() {
 
 	Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
 
-	// get device info
-	info, err := client.MiLight.Info()
-	if err != nil {
-		panic(err)
-	}
-
-	log.Println(string(info))
+	client.GetMiLightStatus()
 
 	if stat, err := tm.BatteryStatus(); err != nil {
 		panic(err)
