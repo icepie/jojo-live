@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	indoorTemperature float64
+	status Status
 )
 
 type Battery struct {
@@ -28,8 +28,28 @@ type Status struct {
 
 func updateIndoorTemperature() {
 	for {
-		indoorTemperature, _ = client.GetMaAcIndoorTemperature()
+		status.IndoorTemperature, _ = client.GetMaAcIndoorTemperature()
 		time.Sleep(10 * time.Second)
+	}
+}
+
+func updateOtherStatus() {
+	for {
+		// var status Status
+
+		lightStatus, err := client.GetMiLightStatus()
+		if err == nil {
+			status.LightPower = lightStatus.Result[0].(string) == "on"
+		}
+
+		if stat, err := tm.BatteryStatus(); err == nil {
+			status.Battery.BatteryPercentage = stat.Percentage
+			status.Battery.BatterISCharging = stat.Status != "DISCHARGING"
+			status.Battery.BatteryHealth = stat.Health
+			status.Battery.BatteryTemperature = stat.Temperature
+		}
+
+		time.Sleep(5 * time.Second)
 	}
 }
 
@@ -45,21 +65,6 @@ func main() {
 	r.Use(cors.Default())
 
 	r.GET("/status", func(c *gin.Context) {
-		var status Status
-
-		lightStatus, err := client.GetMiLightStatus()
-		if err == nil {
-			status.LightPower = lightStatus.Result[0].(string) == "on"
-		}
-
-		status.IndoorTemperature = indoorTemperature
-
-		if stat, err := tm.BatteryStatus(); err == nil {
-			status.Battery.BatteryPercentage = stat.Percentage
-			status.Battery.BatterISCharging = stat.Status != "DISCHARGING"
-			status.Battery.BatteryHealth = stat.Health
-			status.Battery.BatteryTemperature = stat.Temperature
-		}
 
 		c.JSON(200, status)
 	})
