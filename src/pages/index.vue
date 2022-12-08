@@ -125,8 +125,8 @@ const VideoType = ref<null | "flv" | "hls">(null);
 const initVideoPlayer = () => {
   // 播放 hls
   const video = document.querySelector("video");
-  const hlsUrl = "https://jojos.singzer.cn/live/movie.m3u8";
-  const flvURl = "https://jojo.singzer.cn/live/movie.flv";
+  const hlsUrl = "http://live.singzer.cn/live/jojo.m3u8";
+  const flvURl = "http://live.singzer.cn/live/jojo.flv";
 
   VideoType.value = "hls";
   if (Hls.isSupported()) {
