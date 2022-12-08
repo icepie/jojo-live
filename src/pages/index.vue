@@ -91,7 +91,23 @@ const getStatus = async () => {
   console.log(status.value);
 };
 
+const connWs = () => {
+  const ws = new WebSocket("wss://jojot.singzer.cn/ws");
+  ws.onopen = () => {
+    console.log("ws open");
+  };
+  ws.onmessage = (e) => {
+    console.log(e.data);
+  };
+  ws.onclose = () => {
 
+    console.log("ws close");
+    // 重新连接
+    setTimeout(() => {
+      connWs();
+    }, 1000);
+  };
+};
 
 // const name = $ref('')
 // const router = useRouter()
@@ -156,6 +172,7 @@ const getStatusTimer = ref(null);
 onMounted(async () => {
   initVideoPlayer();
   initValineComment();
+  connWs();
   await getStatus();
 
   // 定时获取状态
@@ -253,6 +270,9 @@ onUnmounted(() => {
           </div>
           <div v-if="status.IsSleep" class="flex flex-row">
             <div>唤醒时间: {{ status?.WakeTime }}</div>
+          </div>
+          <div class="flex flex-row">
+            <div>观看人数: {{ status?.OnlineNum }}</div>
           </div>
         </div>
       </div>
