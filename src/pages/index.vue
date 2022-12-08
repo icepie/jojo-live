@@ -7,20 +7,40 @@ import Valine from "valine";
 
 import axios from 'axios'
 
+import { useToast } from "vue-toastification";
+
 defineOptions({
   name: 'IndexPage',
 })
 
 const turnOnLight = async () => {
-  await axios.get('https://jojot.singzer.cn/light/on')
+  const data = await axios.get('https://jojot.singzer.cn/light/on')
+  const toast = useToast();
+  if (data.status !== 200) {
+    toast.error('开灯失败! ' + new Date().toLocaleString());
+    return
+  }
+  toast.success('开灯成功! ' + new Date().toLocaleString());
 }
 
 const turnOffLight = async () => {
-  await axios.get('https://jojot.singzer.cn/light/off')
+  const data = await axios.get('https://jojot.singzer.cn/light/off')
+  const toast = useToast();
+  if (data.status !== 200) {
+    toast.error('关灯失败! ' + new Date().toLocaleString());
+    return
+  }
+  toast.success('关灯成功! ' + new Date().toLocaleString());
 }
 
 const call = async () => {
-  await axios.get('https://jojot.singzer.cn/call')
+  const data = await axios.get('https://jojot.singzer.cn/call')
+  const toast = useToast();
+  if (data.status !== 200) {
+    toast.error('呼叫失败! ' + new Date().toLocaleString());
+    return
+  }
+  toast.success('呼叫成功! ' + new Date().toLocaleString());
 }
 
 const status = ref(null)
@@ -125,14 +145,11 @@ onUnmounted(() => {
     <div py-1 />
 
 
-
-
     <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
 
 
-
-      <div v-if="status" px-auto mx-auto  py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white justify-center
+      <div v-if="status" px-auto mx-auto w-sm  py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white justify-center
         items-start>
         <div mx-auto>
           <div class="flex flex-row" justify-between>
