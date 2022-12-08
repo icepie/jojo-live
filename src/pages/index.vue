@@ -76,20 +76,20 @@ const sleepMode = async () => {
     toast.error(error.code + " " + new Date().toLocaleString());
   }
 
-  await getStatus();
+  // await getStatus();
 };
 
 const status = ref(null);
 
-const getStatus = async () => {
-  const data = await axios.get("https://jojot.singzer.cn/status");
-  if (data.status === 200) {
-    status.value = data.data;
-  } else {
-    status.value = null;
-  }
-  console.log(status.value);
-};
+// const getStatus = async () => {
+//   const data = await axios.get("https://jojot.singzer.cn/status");
+//   if (data.status === 200) {
+//     status.value = data.data;
+//   } else {
+//     status.value = null;
+//   }
+//   console.log(status.value);
+// };
 
 const connWs = () => {
   const ws = new WebSocket("wss://jojot.singzer.cn/ws");
@@ -97,7 +97,9 @@ const connWs = () => {
     console.log("ws open");
   };
   ws.onmessage = (e) => {
-    console.log(e.data);
+    const data = JSON.parse(e.data);
+    console.log(data);
+    data.type === "status" && (status.value = data.data);
   };
   ws.onclose = () => {
 
@@ -173,12 +175,12 @@ onMounted(async () => {
   initVideoPlayer();
   initValineComment();
   connWs();
-  await getStatus();
+  // await getStatus();
 
   // 定时获取状态
-  getStatusTimer.value = setInterval(async () => {
-    await getStatus();
-  }, 15000);
+  // getStatusTimer.value = setInterval(async () => {
+  //   await getStatus();
+  // }, 15000);
 });
 
 onUnmounted(() => {
