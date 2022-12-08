@@ -12,6 +12,8 @@ import { useToast } from "vue-toastification";
 
 const showDialog = ref(false);
 
+const showSleepDialog = ref(false);
+
 defineOptions({
   name: "IndexPage",
 });
@@ -180,6 +182,26 @@ onUnmounted(() => {
     </ACard>
   </ADialog>
 
+  <ADialog v-model="showSleepDialog">
+    <ACard title="开启睡眠模式">
+      <div py-5 px-5 flex flex-col justify-center items-center>
+        <text py-1>开启后将进入睡眠💤, 无法操作交互功能, 待模式结束后恢复!</text>
+        <text py-1>确认开启么?</text>
+
+        <div flex flex-row justify-center px-auto >
+          <ABtn class="my-3 text-sm btn px-auto mx-10" rounded-2xl @click="showSleepDialog = false">
+          取消
+        </ABtn>
+        <ABtn class="my-3 text-sm btn px-auto  mx-10" rounded-2xl color="info" @click="sleepMode">
+          确认
+        </ABtn>
+        </div>
+
+
+      </div>
+    </ACard>
+  </ADialog>
+
   <div>
     <div text-4xl inline-block>🦜</div>
     <p>
@@ -242,7 +264,7 @@ onUnmounted(() => {
 
         <ABtn class="m-3 text-sm btn" color="success" @click="call"> 呼叫 </ABtn>
 
-        <ABtn  v-if="(status && !status.IsSleep)" class="m-3 text-sm btn" @click="sleepMode"> 睡眠模式 </ABtn>
+        <ABtn  v-if="(status && !status.IsSleep)" class="m-3 text-sm btn" @click="(showSleepDialog = true)"> 睡眠模式 </ABtn>
 
       </div>
     </div>
