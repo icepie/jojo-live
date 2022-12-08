@@ -56,6 +56,7 @@ func updateOtherStatus() {
 func main() {
 
 	go updateIndoorTemperature()
+	go updateOtherStatus()
 
 	// gin
 
