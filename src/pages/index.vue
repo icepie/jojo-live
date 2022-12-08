@@ -11,7 +11,7 @@ import { ABtn,ADialog, ACard } from 'anu-vue'
 
 import { useToast } from "vue-toastification";
 
-const showDialog = ref(true)
+const showDialog = ref(false)
 
 defineOptions({
   name: 'IndexPage',
