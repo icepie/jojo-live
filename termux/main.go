@@ -156,7 +156,7 @@ func main() {
 
 		// 判断是否到睡醒时间
 		if time.Now().Before(wakeTime) {
-			c.JSON(403, "JOJO")
+			c.JSON(403, "JOJO正(要)睡觉哦!")
 			return
 		}
 
