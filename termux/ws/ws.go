@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"encoding/json"
+	"jojo-live/util"
 	"log"
 	"net/http"
 
@@ -8,9 +10,15 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var (
-	WSConnMap = make(map[string]*websocket.Conn)
-)
+type WsMessage struct {
+	Type string      `json:"type"`
+	Data interface{} `json:"data"`
+}
+
+func (m WsMessage) ToJson() []byte {
+	d, _ := json.Marshal(m)
+	return d
+}
 
 var upGrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
@@ -26,11 +34,19 @@ func Ws(c *gin.Context) {
 		return
 	}
 
-	WSConnMap[ws.RemoteAddr().String()] = ws
+	util.WSConnMap[ws.RemoteAddr().String()] = ws
+
+	if err := ws.WriteMessage(websocket.TextMessage, WsMessage{
+		Type: "status",
+		Data: util.GetStatus(),
+	}.ToJson()); err != nil {
+		log.Println(err)
+		// return
+	}
 
 	defer func() {
 		ws.Close()
-		delete(WSConnMap, ws.RemoteAddr().String())
+		delete(util.WSConnMap, ws.RemoteAddr().String())
 	}()
 
 	for {
@@ -51,7 +67,7 @@ func Ws(c *gin.Context) {
 }
 
 func WsBroadcast(msg []byte) {
-	for _, conn := range WSConnMap {
+	for _, conn := range util.WSConnMap {
 		if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
 			log.Println(err)
 			// return
