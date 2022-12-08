@@ -13,7 +13,9 @@ import (
 )
 
 var (
-	status Status
+	status              Status
+	lastLightHandleTime time.Time
+	lastCallTime        time.Time
 )
 
 type Battery struct {
@@ -79,7 +81,7 @@ func main() {
 
 	// CORS middleware
 	r.Use(cors.Default())
-	r.Use(RateLimitMiddleware(1*time.Second, 100, 1))
+	r.Use(RateLimitMiddleware(1*time.Second, 1200, 1))
 
 	r.GET("/status", func(c *gin.Context) {
 
@@ -87,18 +89,57 @@ func main() {
 	})
 
 	r.GET("/light/on", func(c *gin.Context) {
-		client.SetMiLightPower(true)
-		c.JSON(200, "ok")
+
+		if time.Since(lastLightHandleTime) < 5*time.Second {
+			c.JSON(403, "操作太频繁了")
+			return
+		}
+
+		lastLightHandleTime = time.Now()
+
+		err := client.SetMiLightPower(true)
+		if err != nil {
+			c.JSON(500, err.Error())
+			return
+		}
+
+		c.JSON(200, "开灯成功")
 	})
 
 	r.GET("/light/off", func(c *gin.Context) {
-		client.SetMiLightPower(false)
-		c.JSON(200, "ok")
+
+		if time.Since(lastLightHandleTime) < 5*time.Second {
+			c.JSON(403, "操作太频繁了")
+			return
+		}
+
+		lastLightHandleTime = time.Now()
+
+		err := client.SetMiLightPower(false)
+		if err != nil {
+			c.JSON(500, err.Error())
+			return
+		}
+
+		c.JSON(200, "关灯成功")
 	})
 
 	r.GET("/call", func(c *gin.Context) {
-		Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
-		c.JSON(200, "ok")
+
+		if time.Since(lastCallTime) < 5*time.Second {
+			c.JSON(403, "呼叫太频繁了")
+			return
+		}
+
+		lastCallTime = time.Now()
+
+		err := Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
+		if err != nil {
+			c.JSON(500, err.Error())
+			return
+		}
+
+		c.JSON(200, "已呼叫")
 	})
 
 	r.Run(":8080")
