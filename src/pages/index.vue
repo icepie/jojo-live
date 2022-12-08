@@ -126,7 +126,7 @@ onMounted(() => {
   // 定时获取状态
   getStatusTimer.value = setInterval(async () => {
     await getStatus()
-  }, 1000)
+  }, 15000)
 })
 
 onUnmounted(() => {
