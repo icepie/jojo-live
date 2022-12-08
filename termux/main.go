@@ -2,11 +2,14 @@ package main
 
 import (
 	"jojo-live/client"
+	"net/http"
 	"time"
 
 	tm "github.com/eternal-flame-AD/go-termux"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	"github.com/juju/ratelimit"
 )
 
 var (
@@ -53,6 +56,18 @@ func updateOtherStatus() {
 	}
 }
 
+func RateLimitMiddleware(fillInterval time.Duration, cap, quantum int64) gin.HandlerFunc {
+	bucket := ratelimit.NewBucketWithQuantum(fillInterval, cap, quantum)
+	return func(c *gin.Context) {
+		if bucket.TakeAvailable(1) < 1 {
+			c.String(http.StatusForbidden, "操作太频繁了...")
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
+
 func main() {
 
 	go updateIndoorTemperature()
@@ -64,6 +79,7 @@ func main() {
 
 	// CORS middleware
 	r.Use(cors.Default())
+	r.Use(RateLimitMiddleware(1*time.Second, 10, 1))
 
 	r.GET("/status", func(c *gin.Context) {
 

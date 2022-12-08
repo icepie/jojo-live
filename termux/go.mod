@@ -8,6 +8,7 @@ require (
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/icepie/miio.go v0.1.0
+	github.com/juju/ratelimit v1.0.2
 )
 
 require (
