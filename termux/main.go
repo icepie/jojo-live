@@ -144,6 +144,13 @@ func main() {
 			return
 		}
 
+		// 判断是否在 23:00 ~ 8:00
+		now := time.Now().Add(8 * time.Hour)
+		if now.Hour() > 23 || now.Hour() < 8 {
+			c.JSON(403, "深夜不能呼叫JOJO!")
+			return
+		}
+
 		if time.Since(util.LastCallTime) < 5*time.Second {
 			c.JSON(403, "呼叫太频繁了")
 			return
