@@ -41,7 +41,7 @@ func main() {
 	go util.UpdateIndoorTemperature()
 	go util.UpdateOtherStatus()
 
-	go func() {}()
+	go WsBroadcast()
 
 	// gin
 
