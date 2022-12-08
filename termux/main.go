@@ -3,6 +3,7 @@ package main
 import (
 	"jojo-live/client"
 	"net/http"
+	"strconv"
 	"time"
 
 	tm "github.com/eternal-flame-AD/go-termux"
@@ -122,8 +123,33 @@ func main() {
 	})
 
 	r.GET("sleep", func(c *gin.Context) {
-		wakeTime = time.Now().Add(1 * time.Hour)
-		c.JSON(200, "已睡眠")
+
+		// 判断是否到睡醒时间
+		if time.Now().Before(wakeTime) {
+			c.JSON(200, "已经是睡眠模式啦")
+			return
+		}
+
+		wakeTime = time.Now()
+
+		hour := c.Query("hour")
+
+		if hour != "" {
+			h, err := strconv.Atoi(hour)
+			if err != nil {
+				c.JSON(500, err.Error())
+				return
+			}
+			wakeTime = time.Now().Add(time.Duration(h) * time.Hour)
+			if h > 12 && h < 1 {
+				c.JSON(500, "睡觉时长不合法")
+			}
+
+		} else {
+			wakeTime = time.Now().Add(1 * time.Hour)
+		}
+
+		c.JSON(200, "准备睡")
 	})
 
 	r.GET("/light/off", func(c *gin.Context) {

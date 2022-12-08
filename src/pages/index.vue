@@ -60,6 +60,21 @@ const call = async () => {
   }
 };
 
+const sleepMode = async () => {
+  const toast = useToast();
+
+  try {
+    const data = await axios.get("https://jojot.singzer.cn/sleep");
+    toast.success(data.data + " " + new Date().toLocaleString());
+  } catch (error) {
+    if (error.response) {
+      toast.error(error.response.data + " " + new Date().toLocaleString());
+      return;
+    }
+    toast.error(error.code + " " + new Date().toLocaleString());
+  }
+};
+
 const status = ref(null);
 
 const getStatus = async () => {
@@ -71,6 +86,8 @@ const getStatus = async () => {
   }
   console.log(status.value);
 };
+
+
 
 // const name = $ref('')
 // const router = useRouter()
@@ -210,6 +227,9 @@ onUnmounted(() => {
           <div class="flex flex-row">
             <div>室内温度: {{ status?.IndoorTemperature }} °C</div>
           </div>
+          <div v-if="status.IsSleep" class="flex flex-row">
+            <div>唤醒时间: {{ status?.WakeTime }}</div>
+          </div>
         </div>
       </div>
 
@@ -219,6 +239,9 @@ onUnmounted(() => {
         <ABtn class="m-3 text-sm btn" color="info" @click="turnOffLight"> 关灯 </ABtn>
 
         <ABtn class="m-3 text-sm btn" color="success" @click="call"> 呼叫 </ABtn>
+
+        <ABtn  v-if="(status && !status.IsSleep)" class="m-3 text-sm btn" @click="sleepMode"> 睡眠模式 </ABtn>
+
       </div>
     </div>
 
