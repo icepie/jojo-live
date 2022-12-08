@@ -79,7 +79,7 @@ func main() {
 
 	// CORS middleware
 	r.Use(cors.Default())
-	r.Use(RateLimitMiddleware(1*time.Second, 10, 1))
+	r.Use(RateLimitMiddleware(1*time.Second, 100, 1))
 
 	r.GET("/status", func(c *gin.Context) {
 

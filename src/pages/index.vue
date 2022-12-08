@@ -53,6 +53,8 @@ const getStatus = async () => {
   const data = await axios.get('https://jojot.singzer.cn/status')
   if (data.status === 200) {
     status.value = data.data
+  } else {
+    status.value = null
   }
   console.log(status.value)
 }
