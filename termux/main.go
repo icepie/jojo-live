@@ -16,6 +16,7 @@ var (
 	status              Status
 	lastLightHandleTime time.Time
 	lastCallTime        time.Time
+	wakeTime            time.Time
 )
 
 type Battery struct {
@@ -27,6 +28,8 @@ type Battery struct {
 
 type Status struct {
 	Battery           Battery
+	IsSleep           bool
+	WakeTime          string
 	LightPower        bool
 	IndoorTemperature float64
 }
@@ -81,14 +84,26 @@ func main() {
 
 	// CORS middleware
 	r.Use(cors.Default())
+
 	r.Use(RateLimitMiddleware(1*time.Second, 1200, 1))
 
 	r.GET("/status", func(c *gin.Context) {
+
+		status.IsSleep = time.Now().Before(wakeTime)
+
+		// 东八区
+		status.WakeTime = wakeTime.Add(8 * time.Hour).Format("2006-01-02 15:04:05")
 
 		c.JSON(200, status)
 	})
 
 	r.GET("/light/on", func(c *gin.Context) {
+
+		// 判断是否到睡醒时间
+		if time.Now().Before(wakeTime) {
+			c.JSON(403, "JOJO正(要)睡觉哦!")
+			return
+		}
 
 		if time.Since(lastLightHandleTime) < 5*time.Second {
 			c.JSON(403, "操作太频繁了")
@@ -106,7 +121,18 @@ func main() {
 		c.JSON(200, "开灯成功")
 	})
 
+	r.GET("sleep", func(c *gin.Context) {
+		wakeTime = time.Now().Add(1 * time.Hour)
+		c.JSON(200, "已睡眠")
+	})
+
 	r.GET("/light/off", func(c *gin.Context) {
+
+		// 判断是否到睡醒时间
+		if time.Now().Before(wakeTime) {
+			c.JSON(403, "JOJO")
+			return
+		}
 
 		if time.Since(lastLightHandleTime) < 5*time.Second {
 			c.JSON(403, "操作太频繁了")
@@ -125,6 +151,12 @@ func main() {
 	})
 
 	r.GET("/call", func(c *gin.Context) {
+
+		// 判断是否到睡醒时间
+		if time.Now().Before(wakeTime) {
+			c.JSON(403, "JOJO正(要)睡觉哦!")
+			return
+		}
 
 		if time.Since(lastCallTime) < 5*time.Second {
 			c.JSON(403, "呼叫太频繁了")
