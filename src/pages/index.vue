@@ -73,6 +73,8 @@ const sleepMode = async () => {
     }
     toast.error(error.code + " " + new Date().toLocaleString());
   }
+
+  await getStatus();
 };
 
 const status = ref(null);
