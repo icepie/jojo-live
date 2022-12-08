@@ -2,6 +2,8 @@ package main
 
 import (
 	"jojo-live/client"
+	"jojo-live/util"
+	"jojo-live/ws"
 	"net/http"
 	"strconv"
 	"time"
@@ -29,6 +31,7 @@ type Battery struct {
 
 type Status struct {
 	Battery           Battery
+	OnlineNum         int
 	IsSleep           bool
 	WakeTime          string
 	LightPower        bool
@@ -83,6 +86,8 @@ func main() {
 
 	r := gin.Default()
 
+	r.GET("/ws", ws.Ws)
+
 	// CORS middleware
 	r.Use(cors.Default())
 
@@ -94,6 +99,8 @@ func main() {
 
 		// 东八区
 		status.WakeTime = wakeTime.Add(8 * time.Hour).Format("2006-01-02 15:04:05")
+
+		status.OnlineNum = len(ws.WSConnMap)
 
 		c.JSON(200, status)
 	})
@@ -191,7 +198,7 @@ func main() {
 
 		lastCallTime = time.Now()
 
-		err := Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
+		err := util.Mpv("https://img.tukuppt.com/newpreview_music/09/00/25/5c89106abeedd53089.mp3")
 		if err != nil {
 			c.JSON(500, err.Error())
 			return
