@@ -7,7 +7,11 @@ import Valine from "valine";
 
 import axios from 'axios'
 
+import { ABtn,ADialog, ACard } from 'anu-vue'
+
 import { useToast } from "vue-toastification";
+
+const showDialog = ref(true)
 
 defineOptions({
   name: 'IndexPage',
@@ -131,6 +135,20 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <ADialog v-model=showDialog>
+    <ACard title="请JOJO吃瓜子~">
+      <div  py-5 px-5 flex flex-col justify-center items-center>
+        <text py-1>记得备注信息哦!</text>
+        <img width="256" height="256" src="/dn.jpg" />
+        <ABtn class="my-3 text-sm btn " rounded-2xl @click="(showDialog = false)">
+        关闭
+      </ABtn>
+      </div>
+    </ACard>
+
+  </ADialog>
+
+
   <div>
     <div text-4xl inline-block>🦜</div>
     <p>
@@ -170,17 +188,17 @@ onUnmounted(() => {
 
 
       <div>
-        <button class="m-3 text-sm btn" @click="turnOnLight">
+        <ABtn class="m-3 text-sm btn" color="info" @click="turnOnLight">
           开灯
-        </button>
+        </ABtn>
 
-        <button class="m-3 text-sm btn" @click="turnOffLight">
+        <ABtn class="m-3 text-sm btn" color="info" @click="turnOffLight">
           关灯
-        </button>
+        </ABtn>
 
-        <button class="m-3 text-sm btn" @click="call">
+        <ABtn class="m-3 text-sm btn" color="success" @click="call">
           呼叫
-        </button>
+        </ABtn>
       </div>
 
     </div>
@@ -191,12 +209,15 @@ onUnmounted(() => {
         <video rounded shadow controls autoplay id="video" width="360" height="640"></video>
       </div>
 
+      <ABtn class="my-3 text-sm btn " rounded-2xl color="warning" @click="showDialog = true">
+        打赏
+      </ABtn>
 
       <!-- <div pa-10>
         <TheInput v-model="name" placeholder="发送弹幕" autocomplete="false" @keydown.enter="go" />
       </div> -->
 
-      <div py-4 />
+
       <text font-bold>如果你有好的想法或者建议</text>
       <text font-bold>可以在下面评论或者联系我 (wx: oh-icepie)</text>
 

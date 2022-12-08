@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^9.6.0",
+    "anu-vue": "^0.11.0",
     "axios": "^1.2.1",
     "flv.js": "^1.6.2",
     "hls.js": "1.2.5-0.canary.8749",
@@ -23,6 +24,8 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.33.1",
+    "@anu-vue/preset-theme-default": "^0.11.0",
+    "@iconify-json/bx": "^1.1.5",
     "@iconify-json/carbon": "^1.1.11",
     "@types/axios": "^0.14.0",
     "@types/node": "^18.11.11",

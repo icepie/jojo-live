@@ -5,11 +5,18 @@ import App from './App.vue'
 
 import Toast, { PluginOptions } from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import { anu } from 'anu-vue'
 
 import '@unocss/reset/tailwind.css'
 import 'video.js/dist/video-js.css'
 import './styles/main.css'
 import 'uno.css'
+
+// anu styles
+import 'anu-vue/dist/style.css'
+
+// default theme styles
+import '@anu-vue/preset-theme-default/dist/styles.scss'
 
 const app = createApp(App)
 const router = createRouter({
@@ -25,5 +32,7 @@ const options:PluginOptions = {
 };
 
 app.use(Toast, options);
+
+app.use(anu)
 
 app.mount('#app')
