@@ -250,6 +250,30 @@ onUnmounted(() => {
     <div v-if="status">
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
 
+      <div px-10
+        mx-auto
+        w-sm
+        py-1
+        my-1
+        flex
+        flex-wrap
+        flex-col
+        rounded
+        bg-green-5
+        text-white
+        justify-center
+        items-center>
+
+        <div font-bold>
+          打算整一个涂鸦板的功能
+        </div>
+
+        <div text-sm >
+        (利用墨水屏实现, 感谢评论区的创意~)
+      </div>
+
+      </div>
+
       <div
         px-auto
         mx-auto
