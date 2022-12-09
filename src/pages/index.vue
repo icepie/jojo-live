@@ -2,17 +2,25 @@
 import Hls from "hls.js";
 import Flv from "flv.js";
 
-import Valine from "valine";
-
 import axios from "axios";
 
 import { ABtn, ADialog, ACard } from "anu-vue";
 
 import { useToast } from "vue-toastification";
 
+import  { Waline }  from '@waline/client/component';
+
+import '@waline/client/dist/waline.css';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 const showDialog = ref(false);
 
 const showSleepDialog = ref(false);
+
+const serverURL = 'https://waline.icepie.net';
+
+const path = computed(() => useRoute().path);
 
 defineOptions({
   name: "IndexPage",
@@ -157,36 +165,13 @@ const initVideoPlayer = () => {
   isNotSupport.value = true;
 };
 
-const initValineComment = () => {
-  new Valine({
-    el: "#vcomments",
-    appId: "rUxninURp0tKz3PUoEKVB4Jw-gzGzoHsz",
-    appKey: "vuh6OflApSNqG84hj0kHmYbY",
-    placeholder: "欢迎留言",
-    visitor: true,
-    avatar: "monsterid",
-    // recordIP: true,
-    requiredFields: ["nick"],
-    lang: "zh-cn",
-  });
-};
-
-const getStatusTimer = ref(null);
 
 onMounted(async () => {
   initVideoPlayer();
-  initValineComment();
   connWs();
-  // await getStatus();
-
-  // 定时获取状态
-  // getStatusTimer.value = setInterval(async () => {
-  //   await getStatus();
-  // }, 15000);
 });
 
 onUnmounted(() => {
-  clearInterval(getStatusTimer.value);
 });
 </script>
 
@@ -352,30 +337,14 @@ onUnmounted(() => {
       <text font-bold>如果你有好的想法或者建议</text>
       <text font-bold>可以在下面评论或者联系我 (wx: oh-icepie)</text>
 
-      <div></div>
+      <!-- <div></div> -->
 
-      <div my-5>
-        <div id="vcomments"></div>
-      </div>
-
-      <span
-        text-gray
-        text-sm
-        font-bold
-        id="/"
-        class="leancloud_visitors"
-        data-flag-title="Your Article Title"
-      >
-        <text class="post-meta-item-text">访问量: </text>
-        <text class="leancloud-visitors-count">1000000</text> 次
-      </span>
     </div>
 
-    <!-- <div bg-blue>
-      <button class="m-3 text-sm btn" :disabled="!name" @click="go">
-        Go
-      </button>
-    </div> -->
+    <div mx-auto px-auto>
+      <Waline :serverURL="serverURL" :path="path" dark=".dark" />
+    </div>
+
   </div>
 </template>
 
