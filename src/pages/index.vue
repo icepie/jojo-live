@@ -165,8 +165,8 @@ const initValineComment = () => {
     placeholder: "欢迎留言",
     visitor: true,
     avatar: "monsterid",
-    recordIP: true,
-    requiredFields: ["nick", "mail"],
+    // recordIP: true,
+    requiredFields: ["nick"],
     lang: "zh-cn",
   });
 };
