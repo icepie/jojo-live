@@ -236,8 +236,14 @@ onUnmounted(() => {
       </a>
     </p>
     <p>
-      <em text-xl op75>我是一只快活的傻鸟~</em>
+      <em text-xl op75>我是一只快活的傻鸟</em>
+
     </p>
+
+    <p>
+      <em text-sm op75>想用我的可爱治愈你~</em>
+    </p>
+
 
     <div py-1 />
 
