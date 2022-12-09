@@ -128,18 +128,6 @@ const initVideoPlayer = () => {
   const hlsUrl = "https://live.singzer.cn/live/jojo.m3u8";
   const flvURl = "https://live.singzer.cn/live/jojo.flv";
 
-    // 播放 flv
-  VideoType.value = "flv";
-  if (Flv.isSupported) {
-    const flvPlayer = Flv.createPlayer({
-      type: "flv",
-      url: flvURl,
-    });
-    flvPlayer.attachMediaElement(video);
-    flvPlayer.load();
-    flvPlayer.play();
-    return;
-  }
 
   VideoType.value = "hls";
   if (Hls.isSupported()) {
@@ -153,6 +141,18 @@ const initVideoPlayer = () => {
     return;
   }
 
+  // 播放 flv
+  VideoType.value = "flv";
+  if (Flv.isSupported) {
+    const flvPlayer = Flv.createPlayer({
+      type: "flv",
+      url: flvURl,
+    });
+    flvPlayer.attachMediaElement(video);
+    flvPlayer.load();
+    flvPlayer.play();
+    return;
+  }
 
   isNotSupport.value = true;
 };
