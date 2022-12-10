@@ -8,7 +8,7 @@ import { ABtn, ADialog, ACard } from "anu-vue";
 
 import { useToast } from "vue-toastification";
 
-import  { Waline }  from '@waline/client/component';
+import { Waline } from '@waline/client/component';
 
 import '@waline/client/dist/waline.css';
 import { computed } from 'vue';
@@ -30,7 +30,7 @@ const turnOnLight = async () => {
   const toast = useToast();
   try {
     const data = await axios.get("https://jojot.singzer.cn/light/on");
-    toast.success(data.data + " "  + new Date().toLocaleString());
+    toast.success(data.data + " " + new Date().toLocaleString());
   } catch (error) {
     if (error.response) {
       toast.error(error.response.data + " " + new Date().toLocaleString());
@@ -194,13 +194,13 @@ onUnmounted(() => {
         <text py-1>开启后将进入睡眠💤, 无法操作交互功能, 待模式结束后恢复!</text>
         <text py-1>确认开启么?</text>
 
-        <div flex flex-row justify-center px-auto >
+        <div flex flex-row justify-center px-auto>
           <ABtn class="my-3 text-sm btn px-auto mx-10" rounded-2xl @click="showSleepDialog = false">
-          取消
-        </ABtn>
-        <ABtn class="my-3 text-sm btn px-auto  mx-10" rounded-2xl color="info" @click="sleepMode">
-          确认
-        </ABtn>
+            取消
+          </ABtn>
+          <ABtn class="my-3 text-sm btn px-auto  mx-10" rounded-2xl color="info" @click="sleepMode">
+            确认
+          </ABtn>
         </div>
 
 
@@ -211,18 +211,12 @@ onUnmounted(() => {
   <div>
     <div text-4xl inline-block>🦜</div>
     <p>
-      <a
-        text-2xl
-        rel="noreferrer"
-        href="https://github.com/antfu/vitesse-lite"
-        target="_blank"
-      >
+      <a text-2xl rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
         JOJO
       </a>
     </p>
     <p>
       <em text-xl op75>我是一只快活的傻鸟</em>
-
     </p>
 
     <p>
@@ -232,48 +226,28 @@ onUnmounted(() => {
 
     <div py-1 />
 
-    <div v-if="status">
+    <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
 
-      <div px-10
-        mx-auto
-        w-sm
-        py-1
-        my-1
-        flex
-        flex-wrap
-        flex-col
-        rounded
-        bg-green-5
-        text-white
-        justify-center
+      <div px-10 mx-auto w-sm py-1 my-1 flex flex-wrap flex-col rounded bg-green-5 text-white justify-center
         items-center>
 
         <div font-bold>
+          JOJO现在出去玩啦, 等他回家吧~
+        </div>
+
+        <!-- <div font-bold>
           打算整一个涂鸦板的功能
         </div>
 
-        <div text-sm >
-        (利用墨水屏实现, 感谢评论区的创意~)
-      </div>
+        <div text-sm>
+          (利用墨水屏实现, 感谢评论区的创意~)
+        </div> -->
 
       </div>
 
-      <div
-        px-auto
-        mx-auto
-        w-sm
-        py-1
-        my-1
-        flex
-        flex-wrap
-        flex-col
-        rounded
-        bg-blue-5
-        text-white
-        justify-center
-        items-start
-      >
+      <div v-if="status" px-auto mx-auto w-sm py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white justify-center
+        items-start>
         <div mx-auto>
           <div class="flex flex-row" justify-between>
             <div>电池电量: {{ status?.Battery.BatteryPercentage }} %</div>
@@ -287,7 +261,7 @@ onUnmounted(() => {
           <div class="flex flex-row">
             <div>室内温度: {{ status?.IndoorTemperature }} °C</div>
           </div>
-          <div v-if="status.IsSleep" class="flex flex-row">
+          <div v-if="status?.IsSleep" class="flex flex-row">
             <div>唤醒时间: {{ status?.WakeTime }}</div>
           </div>
           <div class="flex flex-row">
@@ -296,37 +270,24 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div>
+      <div v-if="status">
         <ABtn class="m-3 text-sm btn" color="info" @click="turnOnLight"> 开灯 </ABtn>
 
         <ABtn class="m-3 text-sm btn" color="info" @click="turnOffLight"> 关灯 </ABtn>
 
         <ABtn class="m-3 text-sm btn" color="success" @click="call"> 呼叫 </ABtn>
 
-        <ABtn  v-if="(status && !status.IsSleep)" class="m-3 text-sm btn" @click="(showSleepDialog = true)"> 睡眠模式 </ABtn>
+        <ABtn v-if="(status && !status.IsSleep)" class="m-3 text-sm btn" @click="(showSleepDialog = true)"> 睡眠模式 </ABtn>
 
       </div>
     </div>
 
     <div flex flex-col justify-center items-center>
-      <div shadow-sm>
-        <video
-          rounded
-          shadow
-          controls
-          autoplay
-          id="video"
-          width="360"
-          height="640"
-        ></video>
+      <div v-if="status" shadow-sm>
+        <video rounded shadow controls autoplay id="video" width="360" height="640"></video>
       </div>
 
-      <ABtn
-        class="my-3 text-sm btn"
-        rounded-2xl
-        color="warning"
-        @click="showDialog = true"
-      >
+      <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
         打赏
       </ABtn>
 
