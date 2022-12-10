@@ -133,8 +133,8 @@ const VideoType = ref<null | "flv" | "hls">(null);
 const initVideoPlayer = () => {
   // 播放 hls
   const video = document.querySelector("video");
-  const hlsUrl = "https://live.singzer.cn/live/jojo.m3u8";
-  const flvURl = "https://live.singzer.cn/live/jojo.flv";
+  const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
+  // const flvURl = "https://live.singzer.cn/live/jojo.flv";
 
 
   VideoType.value = "hls";
@@ -149,18 +149,18 @@ const initVideoPlayer = () => {
     return;
   }
 
-  // 播放 flv
-  VideoType.value = "flv";
-  if (Flv.isSupported) {
-    const flvPlayer = Flv.createPlayer({
-      type: "flv",
-      url: flvURl,
-    });
-    flvPlayer.attachMediaElement(video);
-    flvPlayer.load();
-    flvPlayer.play();
-    return;
-  }
+  // // 播放 flv
+  // VideoType.value = "flv";
+  // if (Flv.isSupported) {
+  //   const flvPlayer = Flv.createPlayer({
+  //     type: "flv",
+  //     url: flvURl,
+  //   });
+  //   flvPlayer.attachMediaElement(video);
+  //   flvPlayer.load();
+  //   flvPlayer.play();
+  //   return;
+  // }
 
   isNotSupport.value = true;
 };
@@ -229,7 +229,7 @@ onUnmounted(() => {
     <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
 
-      <div px-10 mx-auto w-sm py-1 my-1 flex flex-wrap flex-col rounded bg-green-5 text-white justify-center
+      <div v-if="!status" px-10 mx-auto w-sm py-1 my-1 flex flex-wrap flex-col rounded bg-green-5 text-white justify-center
         items-center>
 
         <div font-bold>
@@ -283,7 +283,7 @@ onUnmounted(() => {
     </div>
 
     <div flex flex-col justify-center items-center>
-      <div v-if="status" shadow-sm>
+      <div  shadow-sm>
         <video rounded shadow controls autoplay id="video" width="360" height="640"></video>
       </div>
 
