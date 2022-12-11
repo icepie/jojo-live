@@ -167,8 +167,8 @@ const initVideoPlayer = () => {
 
 
 onMounted(async () => {
-  initVideoPlayer();
   connWs();
+  initVideoPlayer();
 });
 
 onUnmounted(() => {
@@ -283,7 +283,7 @@ onUnmounted(() => {
     </div>
 
     <div flex flex-col justify-center items-center>
-      <div v-if="status" shadow-sm>
+      <div v-show="status" shadow-sm>
         <video rounded shadow controls autoplay id="video" width="360" height="640"></video>
       </div>
 
