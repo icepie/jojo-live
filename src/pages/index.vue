@@ -133,7 +133,7 @@ const VideoType = ref<null | "flv" | "hls">(null);
 const initVideoPlayer = () => {
   // 播放 hls
   const video = document.querySelector("video");
-  const hlsUrl = "https://live.singzer.cn/live/jojo.m3u8";
+  const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
   // const flvURl = "https://live.singzer.cn/live/jojo.flv";
 
 
@@ -283,7 +283,7 @@ onUnmounted(() => {
     </div>
 
     <div flex flex-col justify-center items-center>
-      <div  shadow-sm>
+      <div v-if="status" shadow-sm>
         <video rounded shadow controls autoplay id="video" width="360" height="640"></video>
       </div>
 
