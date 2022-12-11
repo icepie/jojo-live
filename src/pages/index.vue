@@ -18,7 +18,7 @@ const showDialog = ref(false);
 
 const showSleepDialog = ref(false);
 
-const serverURL = 'https://waline.icepie.net';
+const serverURL = 'https://icepie.singzer.cn';
 
 const path = computed(() => useRoute().path);
 
