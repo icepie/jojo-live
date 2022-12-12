@@ -31,36 +31,42 @@ const wsUrl = "wss://jojot.singzer.cn/ws";
 
 let ws = new WebSocket(wsUrl);
 
-ws.onopen = () => {
-  console.log("ws open");
+const initWs = () => {
+  ws = new WebSocket(wsUrl);
+
+  ws.onopen = () => {
+    console.log("ws open");
+  };
+
+  ws.onmessage = (e) => {
+
+    const data = JSON.parse(e.data);
+    console.log(data);
+    switch (data.type) {
+      case "status":
+        status.value = data.data;
+        break;
+      case "danmaku":
+        if (!data.data.isMe) {
+          return;
+        }
+        player.danmaku.send({ ...data.data, time: player.currentTime, isMe: false });
+        break;
+      default:
+        break;
+    }
+  };
+
+  ws.onclose = () => {
+    console.log("ws close");
+    // 重新连接
+    setTimeout(() => {
+      initWs();
+    }, 1000);
+  };
 };
 
-ws.onmessage = (e) => {
 
-  const data = JSON.parse(e.data);
-  console.log(data);
-  switch (data.type) {
-    case "status":
-      status.value = data.data;
-      break;
-    case "danmaku":
-      if (!data.data.isMe) {
-        return;
-      }
-      player.danmaku.send({ ...data.data, time: player.currentTime, isMe: false });
-      break;
-    default:
-      break;
-  }
-};
-
-ws.onclose = () => {
-  console.log("ws close");
-  // 重新连接
-  setTimeout(() => {
-    ws = new WebSocket(wsUrl);
-  }, 1000);
-};
 
 const danmakuOptions = {
   items: [
@@ -243,7 +249,7 @@ const getStatus = async () => {
 // };
 
 onMounted(async () => {
-  // initVideoPlayer();
+  initWs()
 });
 
 onUnmounted(() => { });
