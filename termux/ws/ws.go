@@ -55,13 +55,28 @@ func Ws(c *gin.Context) {
 		if err != nil {
 			break
 		}
-		if string(message) == "ping" {
-			message = []byte("pong")
-		}
-		//写入ws数据
-		err = ws.WriteMessage(mt, message)
-		if err != nil {
-			break
+
+		switch mt {
+		case websocket.TextMessage:
+			// 解析ws消息
+			var msg WsMessage
+			if err := json.Unmarshal(message, &msg); err != nil {
+				log.Println(err)
+				continue
+			}
+
+			if msg.Type == "danmuku" {
+				WsBroadcastToOther(ws.RemoteAddr().String(), message)
+			}
+			// do something
+		case websocket.BinaryMessage:
+			// do something
+		case websocket.CloseMessage:
+			// do something
+		case websocket.PingMessage:
+			// do something
+		case websocket.PongMessage:
+			// do something
 		}
 	}
 }
@@ -71,6 +86,17 @@ func WsBroadcast(msg []byte) {
 		if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
 			log.Println(err)
 			// return
+		}
+	}
+}
+
+func WsBroadcastToOther(addr string, msg []byte) {
+	for k, c := range util.WSConnMap {
+		if k != addr {
+			if err := c.WriteMessage(websocket.TextMessage, msg); err != nil {
+				log.Println(err)
+				// return
+			}
 		}
 	}
 }

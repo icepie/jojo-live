@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import NPlayer from "nplayer";
+import Danmaku from '@nplayer/danmaku'
+import { BulletOption } from "@nplayer/danmaku/dist/src/ts/danmaku/bullet";
 import Hls from "hls.js";
 // import Flv from "flv.js";
 // import NPlayer from "@nplayer/vue/";
@@ -16,7 +18,6 @@ import "@waline/client/dist/waline.css";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
-import Danmaku from '@nplayer/danmaku'
 
 const showDialog = ref(false);
 
@@ -26,6 +27,37 @@ const serverURL = "https://icepie.singzer.cn";
 
 const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
 
+const wsUrl = "wss://jojot.singzer.cn/ws";
+
+let ws = new WebSocket(wsUrl);
+
+ws.onopen = () => {
+  console.log("ws open");
+};
+
+ws.onmessage = (e) => {
+
+  const data = JSON.parse(e.data);
+  console.log(data);
+  switch (data.type) {
+    case "status":
+      status.value = data.data;
+      break;
+    case "danmaku":
+      player.danmaku.send({...data.data, time: player.currentTime});
+      break;
+    default:
+      break;
+  }
+};
+
+ws.onclose = () => {
+  console.log("ws close");
+  // 重新连接
+  setTimeout(() => {
+    ws = new WebSocket(wsUrl);
+  }, 1000);
+};
 
 const danmakuOptions = {
   items: [
@@ -37,15 +69,15 @@ const danmakuOptions = {
 const player = new NPlayer({
   // settings: [],
   controls: [
-    ['play', 'volume', 'spacer','airplay',  'web-fullscreen', 'fullscreen'],
+    ['play', 'spacer', 'web-fullscreen', 'fullscreen'],
     ['progress'],
-    [],
+    ['volume'],
   ],
-  bpControls:{
+  bpControls: {
     650: [
-      ['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'],
-      [],
-      ['spacer', 'airplay'],
+      ['play', 'progress', 'web-fullscreen', 'fullscreen'],
+      ['danmaku-send', 'danmaku-settings'],
+      ['volume'],
     ]
   },
   live: true,
@@ -54,9 +86,23 @@ const player = new NPlayer({
   //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
 });
 
+player.on('DanmakuSend', (opts: BulletOption) => {
+
+  // 发送弹幕
+  ws.send(JSON.stringify({
+    type: "danmaku",
+    data: {
+    ...opts,
+    isMe: false
+  }
+  }))
+  console.log(opts)
+})
+
 const hls = new Hls();
 
 hls.attachMedia(player.video)
+
 hls.on(Hls.Events.MEDIA_ATTACHED, function () {
   hls.loadSource(hlsUrl)
 })
@@ -73,6 +119,14 @@ const path = computed(() => useRoute().path);
 const status = ref(null);
 
 const turnOnLight = async () => {
+
+  // 发送弹幕
+  player.danmaku.send({
+    time: player.currentTime,
+    isMe: false,
+    text: '开灯啦～'
+  })
+
   const toast = useToast();
   try {
     const data = await axios.get("https://jojot.singzer.cn/light/on");
@@ -144,25 +198,6 @@ const getStatus = async () => {
   }
 };
 
-const connWs = () => {
-  const ws = new WebSocket("wss://jojot.singzer.cn/ws");
-  ws.onopen = () => {
-    console.log("ws open");
-  };
-  ws.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    console.log(data);
-    data.type === "status" && (status.value = data.data);
-  };
-  ws.onclose = () => {
-    console.log("ws close");
-    // 重新连接
-    setTimeout(() => {
-      connWs();
-    }, 1000);
-  };
-};
-
 // const name = $ref('')
 // const router = useRouter()
 // const go = () => {
@@ -174,7 +209,7 @@ const connWs = () => {
 
 // const VideoType = ref<null | "flv" | "hls">(null);
 
-const initVideoPlayer = () => {
+// const initVideoPlayer = () => {
 
 
   // 播放 hls
@@ -208,11 +243,10 @@ const initVideoPlayer = () => {
   // }
 
   // isNotSupport.value = true;
-};
+// };
 
 onMounted(async () => {
-  initVideoPlayer();
-  connWs();
+  // initVideoPlayer();
 });
 
 onUnmounted(() => { });
@@ -321,7 +355,7 @@ onUnmounted(() => { });
 
     <div flex flex-col justify-center items-center px-auto mx-auto>
       <div v-show="status">
-        <div id="videobox" ref="videobox" shadow-sm  w-auto md:w-md></div>
+        <div id="videobox" ref="videobox" shadow-sm w-auto md:w-md></div>
       </div>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
