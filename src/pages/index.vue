@@ -16,6 +16,8 @@ import "@waline/client/dist/waline.css";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
+import { SettingItem } from "nplayer/dist/ts/parts/control/items/setting";
+
 const showDialog = ref(false);
 
 const showSleepDialog = ref(false);
@@ -25,23 +27,28 @@ const serverURL = "https://icepie.singzer.cn";
 const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
 
 const player = new NPlayer({
+  controls: [
+    ['play', 'volume', 'time', 'spacer', 'airplay',  'web-fullscreen', 'fullscreen'],
+    ['progress']
+  ],
+  live: true,
   // poster:
   //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
-  });
+});
 
-  const hls = new Hls();
+const hls = new Hls();
 
-  hls.attachMedia(player.video)
-  hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-    hls.loadSource(hlsUrl)
+hls.attachMedia(player.video)
+hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+  hls.loadSource(hlsUrl)
+})
+
+const videobox = ref<HTMLDivElement | null>(null)
+if (getCurrentInstance()) {
+  onMounted(() => {
+    player.mount(unref(videobox) as HTMLDivElement)
   })
-
-  const videobox = ref<HTMLDivElement | null>(null)
-  if (getCurrentInstance()) {
-    onMounted(() => {
-      player.mount(unref(videobox) as HTMLDivElement)
-    })
-  }
+}
 
 const path = computed(() => useRoute().path);
 
@@ -145,12 +152,11 @@ const connWs = () => {
 //     router.push(`/hi/${encodeURIComponent(name)}`)
 // }
 
-const isNotSupport = ref(false);
+// const isNotSupport = ref(false);
 
-const VideoType = ref<null | "flv" | "hls">(null);
+// const VideoType = ref<null | "flv" | "hls">(null);
 
 const initVideoPlayer = () => {
-
 
 
   // 播放 hls
@@ -258,7 +264,7 @@ onUnmounted(() => { });
         </div> -->
       </div>
 
-      <div v-if="status"  w-auto py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white
+      <div v-if="status" w-auto md:w-md mx-auto px-auto py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white
         justify-center items-start>
         <div mx-auto>
           <div class="flex flex-row" justify-between>
@@ -297,7 +303,7 @@ onUnmounted(() => { });
 
     <div flex flex-col justify-center items-center px-auto mx-auto>
       <div v-show="status">
-        <div id="videobox" ref="videobox"  shadow-sm h-auto w-auto ></div>
+        <div id="videobox" ref="videobox" shadow-sm h-auto w-auto></div>
       </div>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
