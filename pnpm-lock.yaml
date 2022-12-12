@@ -5,6 +5,7 @@ specifiers:
   '@anu-vue/preset-theme-default': ^0.11.0
   '@iconify-json/bx': ^1.1.5
   '@iconify-json/carbon': ^1.1.11
+  '@nplayer/danmaku': ^1.0.12
   '@nplayer/vue': ^1.0.12
   '@types/axios': ^0.14.0
   '@types/node': ^18.11.13
@@ -40,6 +41,7 @@ specifiers:
   vue-tsc: ^1.0.13
 
 dependencies:
+  '@nplayer/danmaku': 1.0.12
   '@nplayer/vue': 1.0.12_nplayer@1.0.15
   '@vueuse/core': 9.6.0_vue@3.2.45
   anu-vue: 0.11.0_oqfzueun4xbrgf2ovbiso3szpi
@@ -467,6 +469,10 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.14.0
     dev: true
+
+  /@nplayer/danmaku/1.0.12:
+    resolution: {integrity: sha512-VebpoFddFv5Rcf1u2g2q49/Ri/v21mRDDfhSfIZy5xmo4w0Ig8zG8N44r/YQe6F5ratciN5F7VvlqKqFbOjxog==}
+    dev: false
 
   /@nplayer/vue/1.0.12_nplayer@1.0.15:
     resolution: {integrity: sha512-F7mj5/T1Oegqjh5QeiBeDNkId2zx5W2YRCjhxk0Jtvt37b1T0BQTWdlGiBNtySpeVikY+/naWCWPJg1e1r5CpQ==}

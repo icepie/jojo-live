@@ -16,7 +16,7 @@ import "@waline/client/dist/waline.css";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
-import { SettingItem } from "nplayer/dist/ts/parts/control/items/setting";
+import Danmaku from '@nplayer/danmaku'
 
 const showDialog = ref(false);
 
@@ -26,12 +26,30 @@ const serverURL = "https://icepie.singzer.cn";
 
 const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
 
-const player = new NPlayer({
-  controls: [
-    ['play', 'volume', 'time', 'spacer', 'airplay',  'web-fullscreen', 'fullscreen'],
-    ['progress']
+
+const danmakuOptions = {
+  items: [
+    { time: 1, text: '弹幕功能正在开发中～' }
   ],
+  autoInsert: true,
+}
+
+const player = new NPlayer({
+  // settings: [],
+  controls: [
+    ['play', 'volume', 'spacer','airplay',  'web-fullscreen', 'fullscreen'],
+    ['progress'],
+    [],
+  ],
+  bpControls:{
+    650: [
+      ['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'],
+      [],
+      ['spacer', 'airplay'],
+    ]
+  },
   live: true,
+  plugins: [new Danmaku(danmakuOptions)]
   // poster:
   //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
 });
@@ -303,7 +321,7 @@ onUnmounted(() => { });
 
     <div flex flex-col justify-center items-center px-auto mx-auto>
       <div v-show="status">
-        <div id="videobox" ref="videobox" shadow-sm h-auto w-auto></div>
+        <div id="videobox" ref="videobox" shadow-sm  w-auto md:w-md></div>
       </div>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
