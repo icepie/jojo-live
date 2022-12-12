@@ -65,7 +65,7 @@ func Ws(c *gin.Context) {
 				continue
 			}
 
-			if msg.Type == "danmuku" {
+			if msg.Type == "danmaku" {
 				WsBroadcastToOther(ws.RemoteAddr().String(), message)
 			}
 			// do something

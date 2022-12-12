@@ -44,7 +44,10 @@ ws.onmessage = (e) => {
       status.value = data.data;
       break;
     case "danmaku":
-      player.danmaku.send({...data.data, time: player.currentTime});
+      if (!data.data.isMe) {
+        return;
+      }
+      player.danmaku.send({ ...data.data, time: player.currentTime, isMe: false });
       break;
     default:
       break;
@@ -88,14 +91,16 @@ const player = new NPlayer({
 
 player.on('DanmakuSend', (opts: BulletOption) => {
 
-  // 发送弹幕
-  ws.send(JSON.stringify({
-    type: "danmaku",
-    data: {
-    ...opts,
-    isMe: false
+  if (opts.isMe) {
+    // 发送弹幕
+    ws.send(JSON.stringify({
+      type: "danmaku",
+      data: {
+        ...opts
+      }
+    }
+    ))
   }
-  }))
   console.log(opts)
 })
 
@@ -119,14 +124,6 @@ const path = computed(() => useRoute().path);
 const status = ref(null);
 
 const turnOnLight = async () => {
-
-  // 发送弹幕
-  player.danmaku.send({
-    time: player.currentTime,
-    isMe: false,
-    text: '开灯啦～'
-  })
-
   const toast = useToast();
   try {
     const data = await axios.get("https://jojot.singzer.cn/light/on");
@@ -212,37 +209,37 @@ const getStatus = async () => {
 // const initVideoPlayer = () => {
 
 
-  // 播放 hls
-  // const video = document.querySelector("video");
+// 播放 hls
+// const video = document.querySelector("video");
 
-  // const flvURl = "https://live.singzer.cn/live/jojo.flv";
+// const flvURl = "https://live.singzer.cn/live/jojo.flv";
 
-  // VideoType.value = "hls";
-  // if (Hls.isSupported()) {
-  //   const hls = new Hls();
-  //   hls.loadSource(hlsUrl);
-  //   hls.attachMedia(video);
-  //   video.play();
-  //   return;
-  // } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-  //   video.src = hlsUrl;
-  //   return;
-  // }
+// VideoType.value = "hls";
+// if (Hls.isSupported()) {
+//   const hls = new Hls();
+//   hls.loadSource(hlsUrl);
+//   hls.attachMedia(video);
+//   video.play();
+//   return;
+// } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+//   video.src = hlsUrl;
+//   return;
+// }
 
-  // // 播放 flv
-  // VideoType.value = "flv";
-  // if (Flv.isSupported) {
-  //   const flvPlayer = Flv.createPlayer({
-  //     type: "flv",
-  //     url: flvURl,
-  //   });
-  //   flvPlayer.attachMediaElement(video);
-  //   flvPlayer.load();
-  //   flvPlayer.play();
-  //   return;
-  // }
+// // 播放 flv
+// VideoType.value = "flv";
+// if (Flv.isSupported) {
+//   const flvPlayer = Flv.createPlayer({
+//     type: "flv",
+//     url: flvURl,
+//   });
+//   flvPlayer.attachMediaElement(video);
+//   flvPlayer.load();
+//   flvPlayer.play();
+//   return;
+// }
 
-  // isNotSupport.value = true;
+// isNotSupport.value = true;
 // };
 
 onMounted(async () => {
