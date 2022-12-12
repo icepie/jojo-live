@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"jojo-live/client"
 	"jojo-live/util"
 	"jojo-live/ws"
@@ -26,28 +27,46 @@ func RateLimitMiddleware(fillInterval time.Duration, cap, quantum int64) gin.Han
 	}
 }
 
-func WsBroadcast() {
+func GetStatus() util.Status {
+
+	util.MainStatus.IsSleep = time.Now().Before(util.WakeTime)
+
+	// 东八区
+	util.MainStatus.WakeTime = util.WakeTime.Add(8 * time.Hour).Format("2006-01-02 15:04:05")
+
+	util.MainStatus.OnlineNum = ws.WsHub.Len()
+
+	return util.MainStatus
+}
+
+func Broadcast() {
 	for {
-		ws.WsBroadcast(ws.WsMessage{
+		data, _ := json.Marshal(ws.WsMessage{
 			Type: "status",
-			Data: util.GetStatus(),
-		}.ToJson())
-		time.Sleep(5 * time.Second)
+			Data: GetStatus(),
+		})
+		ws.WsHub.Broadcast(data)
+		time.Sleep(3 * time.Second)
 	}
 }
 
 func main() {
 
-	go util.UpdateIndoorTemperature()
+	// go util.UpdateIndoorTemperature()
 	go util.UpdateOtherStatus()
 
-	go WsBroadcast()
+	go Broadcast()
+
+	// hub := ws.NewHub()
 
 	// gin
+	go ws.WsHub.Run()
 
 	r := gin.Default()
 
-	r.GET("/ws", ws.Ws)
+	r.GET("/ws", gin.WrapF(func(w http.ResponseWriter, r *http.Request) {
+		ws.ServeWs(ws.WsHub, w, r)
+	}))
 
 	// CORS middleware
 	r.Use(cors.Default())
@@ -55,7 +74,8 @@ func main() {
 	r.Use(RateLimitMiddleware(1*time.Second, 1200, 1))
 
 	r.GET("/status", func(c *gin.Context) {
-		c.JSON(200, util.GetStatus())
+
+		c.JSON(200, GetStatus())
 	})
 
 	r.GET("/light/on", func(c *gin.Context) {

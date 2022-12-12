@@ -5,7 +5,6 @@ import (
 	"time"
 
 	tm "github.com/eternal-flame-AD/go-termux"
-	"github.com/gorilla/websocket"
 )
 
 var (
@@ -13,8 +12,6 @@ var (
 	LastLightHandleTime time.Time
 	LastCallTime        time.Time
 	WakeTime            time.Time
-
-	WSConnMap = make(map[string]*websocket.Conn)
 )
 
 type Battery struct {
@@ -59,22 +56,3 @@ func UpdateOtherStatus() {
 		time.Sleep(5 * time.Second)
 	}
 }
-
-func GetStatus() Status {
-
-	MainStatus.IsSleep = time.Now().Before(WakeTime)
-
-	// 东八区
-	MainStatus.WakeTime = WakeTime.Add(8 * time.Hour).Format("2006-01-02 15:04:05")
-
-	MainStatus.OnlineNum = len(WSConnMap)
-
-	return MainStatus
-}
-
-// func GetStatusJson() []byte {
-
-// 	sj, _ := json.Marshal(GetStatus())
-
-// 	return sj
-// }
