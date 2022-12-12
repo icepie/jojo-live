@@ -5,6 +5,9 @@ import App from './App.vue'
 
 import Toast, { PluginOptions } from "vue-toastification";
 import "vue-toastification/dist/index.css";
+
+// import NPlayer from "@nplayer/vue";
+
 import { anu } from 'anu-vue'
 
 import '@unocss/reset/tailwind.css'
@@ -25,6 +28,8 @@ const router = createRouter({
 })
 
 app.use(router)
+
+// app.use(NPlayer)
 
 const options:PluginOptions = {
   timeout: 8000,
