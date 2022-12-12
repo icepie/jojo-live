@@ -25,8 +25,8 @@ const serverURL = "https://icepie.singzer.cn";
 const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
 
 const player = new NPlayer({
-  poster:
-    "https://camo.githubusercontent.com/9dc29b67b014909713c12a3cf0f5ca82a306e0af3a5f20602c85c0a1de1c2f88/68747470733a2f2f7777772e7365656b6c6f676f2e6e65742f77702d636f6e74656e742f75706c6f6164732f323031342f31322f747769747465722d6c6f676f2d766563746f722d646f776e6c6f61642e6a7067",
+  // poster:
+  //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
   });
 
   const hls = new Hls();
@@ -295,7 +295,7 @@ onUnmounted(() => { });
 
     <div flex flex-col justify-center items-center mx-10>
       <div v-show="status" shadow-sm>
-        <div id="videobox" ref="videobox" shadow-sm class=""></div>
+        <div id="videobox" ref="videobox" w-md shadow-sm class=""></div>
       </div>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
