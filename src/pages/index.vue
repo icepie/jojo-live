@@ -70,7 +70,7 @@ const initWs = () => {
 
 const danmakuOptions = {
   items: [
-    { time: 1, text: '弹幕功能正在开发中～' }
+    { time: 1, text: '弹幕功能可以使用啦~' }
   ],
   autoInsert: true,
 }
@@ -331,7 +331,7 @@ onUnmounted(() => { });
           <div class="flex flex-row" justify-between>
             <div>设备温度: {{ status?.Battery.BatteryTemperature.toFixed(2) }} °C</div>
           </div>
-          <div class="flex flex-row">
+          <div v-if="status?.IndoorTemperature > 0" class="flex flex-row">
             <div>室内温度: {{ status?.IndoorTemperature }} °C</div>
           </div>
           <div v-if="status?.IsSleep" class="flex flex-row">
