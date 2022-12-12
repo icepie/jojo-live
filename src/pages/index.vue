@@ -105,6 +105,8 @@ const sleepMode = async () => {
     toast.error(error.code + " " + new Date().toLocaleString());
   }
 
+  showSleepDialog.value = false;
+
   await getStatus();
 };
 
@@ -192,7 +194,7 @@ onMounted(async () => {
 onUnmounted(() => { });
 </script>
 
-<template>
+<template w-screen>
   <ADialog v-model="showDialog">
     <ACard title="请JOJO吃瓜子~">
       <div py-5 px-5 flex flex-col justify-center items-center>
@@ -256,7 +258,7 @@ onUnmounted(() => { });
         </div> -->
       </div>
 
-      <div v-if="status" px-auto mx-auto w-sm py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white
+      <div v-if="status"  w-auto py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white
         justify-center items-start>
         <div mx-auto>
           <div class="flex flex-row" justify-between>
@@ -293,9 +295,9 @@ onUnmounted(() => { });
       </div>
     </div>
 
-    <div flex flex-col justify-center items-center mx-10>
-      <div v-show="status" shadow-sm>
-        <div id="videobox" ref="videobox" w-md shadow-sm class=""></div>
+    <div flex flex-col justify-center items-center px-auto mx-auto>
+      <div v-show="status">
+        <div id="videobox" ref="videobox"  shadow-sm h-auto w-auto ></div>
       </div>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
