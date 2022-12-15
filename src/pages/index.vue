@@ -25,7 +25,7 @@ const showSleepDialog = ref(false);
 
 const serverURL = "https://icepie.singzer.cn";
 
-const hlsUrl = "https://ice.singzer.cn/live/jojo.m3u8";
+const hlsUrl = "https://pvio.cn:2022";
 
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
