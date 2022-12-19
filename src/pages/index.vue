@@ -25,7 +25,7 @@ const showSleepDialog = ref(false);
 
 const serverURL = "https://icepie.singzer.cn";
 
-const hlsUrl = "https://pvio.cn:2022";
+const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
@@ -359,7 +359,7 @@ onUnmounted(() => { });
       <div v-show="status">
         <div id="videobox" ref="videobox" shadow-sm w-auto md:w-md></div>
       </div>
-    
+
       <iframe frameborder="yes" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=7821822508&auto=0&height=90"></iframe>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
