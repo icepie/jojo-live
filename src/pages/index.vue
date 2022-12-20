@@ -110,7 +110,6 @@ player.on('DanmakuSend', (opts: BulletOption) => {
   console.log(opts)
 })
 
-
 if (player.video.canPlayType('application/vnd.apple.mpegurl')) {
   player.video.src = hlsUrl
 } else if (Hls.isSupported()) {
