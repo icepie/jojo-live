@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NPlayer from "nplayer";
-import Danmaku from '@nplayer/danmaku'
+import Danmaku from "@nplayer/danmaku";
 import { BulletOption } from "@nplayer/danmaku/dist/src/ts/danmaku/bullet";
 import Hls from "hls.js";
 // import Flv from "flv.js";
@@ -17,7 +17,6 @@ import { Waline } from "@waline/client/component";
 import "@waline/client/dist/waline.css";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-
 
 const showDialog = ref(false);
 
@@ -39,7 +38,6 @@ const initWs = () => {
   };
 
   ws.onmessage = (e) => {
-
     const data = JSON.parse(e.data);
     console.log(data);
     switch (data.type) {
@@ -66,65 +64,59 @@ const initWs = () => {
   };
 };
 
-
-
 const danmakuOptions = {
-  items: [
-    { time: 1, text: '弹幕功能可以使用啦~' }
-  ],
+  items: [{ time: 1, text: "弹幕功能可以使用啦~" }],
   autoInsert: true,
-}
+};
 
 const player = new NPlayer({
   // settings: [],
   controls: [
-    ['play', 'spacer', 'web-fullscreen', 'fullscreen'],
-    ['progress'],
-    ['volume'],
+    ["play", "spacer", "web-fullscreen", "fullscreen"],
+    ["progress"],
+    ["volume"],
   ],
   bpControls: {
     650: [
-      ['play', 'progress', 'web-fullscreen', 'fullscreen'],
-      ['danmaku-send', 'danmaku-settings'],
-      ['volume'],
-    ]
+      ["play", "progress", "web-fullscreen", "fullscreen"],
+      ["danmaku-send", "danmaku-settings"],
+      ["volume"],
+    ],
   },
   live: true,
-  plugins: [new Danmaku(danmakuOptions)]
+  plugins: [new Danmaku(danmakuOptions)],
   // poster:
   //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
 });
 
-player.on('DanmakuSend', (opts: BulletOption) => {
-
+player.on("DanmakuSend", (opts: BulletOption) => {
   if (opts.isMe) {
     // 发送弹幕
-    ws.send(JSON.stringify({
-      type: "danmaku",
-      data: {
-        ...opts
-      }
-    }
-    ))
+    ws.send(
+      JSON.stringify({
+        type: "danmaku",
+        data: {
+          ...opts,
+        },
+      })
+    );
   }
-  console.log(opts)
-})
+  console.log(opts);
+});
 
-if (player.video.canPlayType('application/vnd.apple.mpegurl')) {
-  player.video.src = hlsUrl
-} else if (Hls.isSupported()) {
+if (Hls.isSupported()) {
   const hls = new Hls();
   hls.loadSource(hlsUrl);
   hls.attachMedia(player.video);
-} else {
-  player.video.src = hlsUrl
+} else if (player.video.canPlayType("application/vnd.apple.mpegurl")) {
+  player.video.src = hlsUrl;
 }
 
-const videobox = ref<HTMLDivElement | null>(null)
+const videobox = ref<HTMLDivElement | null>(null);
 if (getCurrentInstance()) {
   onMounted(() => {
-    player.mount(unref(videobox) as HTMLDivElement)
-  })
+    player.mount(unref(videobox) as HTMLDivElement);
+  });
 }
 
 const path = computed(() => useRoute().path);
@@ -203,58 +195,11 @@ const getStatus = async () => {
   }
 };
 
-// const name = $ref('')
-// const router = useRouter()
-// const go = () => {
-//   if (name)
-//     router.push(`/hi/${encodeURIComponent(name)}`)
-// }
-
-// const isNotSupport = ref(false);
-
-// const VideoType = ref<null | "flv" | "hls">(null);
-
-// const initVideoPlayer = () => {
-
-
-// 播放 hls
-// const video = document.querySelector("video");
-
-// const flvURl = "https://live.singzer.cn/live/jojo.flv";
-
-// VideoType.value = "hls";
-// if (Hls.isSupported()) {
-//   const hls = new Hls();
-//   hls.loadSource(hlsUrl);
-//   hls.attachMedia(video);
-//   video.play();
-//   return;
-// } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-//   video.src = hlsUrl;
-//   return;
-// }
-
-// // 播放 flv
-// VideoType.value = "flv";
-// if (Flv.isSupported) {
-//   const flvPlayer = Flv.createPlayer({
-//     type: "flv",
-//     url: flvURl,
-//   });
-//   flvPlayer.attachMediaElement(video);
-//   flvPlayer.load();
-//   flvPlayer.play();
-//   return;
-// }
-
-// isNotSupport.value = true;
-// };
-
 onMounted(async () => {
-  initWs()
+  initWs();
 });
 
-onUnmounted(() => { });
+onUnmounted(() => {});
 </script>
 
 <template w-screen>
@@ -277,10 +222,19 @@ onUnmounted(() => { });
         <text py-1>确认开启么?</text>
 
         <div flex flex-row justify-center px-auto>
-          <ABtn class="my-3 text-sm btn px-auto mx-10" rounded-2xl @click="showSleepDialog = false">
+          <ABtn
+            class="my-3 text-sm btn px-auto mx-10"
+            rounded-2xl
+            @click="showSleepDialog = false"
+          >
             取消
           </ABtn>
-          <ABtn class="my-3 text-sm btn px-auto mx-10" rounded-2xl color="info" @click="sleepMode">
+          <ABtn
+            class="my-3 text-sm btn px-auto mx-10"
+            rounded-2xl
+            color="info"
+            @click="sleepMode"
+          >
             确认
           </ABtn>
         </div>
@@ -291,7 +245,12 @@ onUnmounted(() => { });
   <div>
     <div text-4xl inline-block>🦜</div>
     <p>
-      <a text-2xl rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
+      <a
+        text-2xl
+        rel="noreferrer"
+        href="https://github.com/antfu/vitesse-lite"
+        target="_blank"
+      >
         JOJO
       </a>
     </p>
@@ -308,8 +267,23 @@ onUnmounted(() => { });
     <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
 
-      <div v-if="!status" w-auto md:w-md mx-auto px-auto py-1 my-1 flex flex-wrap flex-col rounded bg-green-5 text-white
-        justify-center items-center>
+      <div
+        v-if="!status"
+        w-auto
+        md:w-md
+        mx-auto
+        px-auto
+        py-1
+        my-1
+        flex
+        flex-wrap
+        flex-col
+        rounded
+        bg-green-5
+        text-white
+        justify-center
+        items-center
+      >
         <div font-bold>JOJO现在出去玩啦, 等他回家吧~</div>
 
         <!-- <div font-bold>
@@ -321,8 +295,23 @@ onUnmounted(() => { });
         </div> -->
       </div>
 
-      <div v-if="status" w-auto md:w-md mx-auto px-auto py-1 my-1 flex flex-wrap flex-col rounded bg-blue-5 text-white
-        justify-center items-start>
+      <div
+        v-if="status"
+        w-auto
+        md:w-md
+        mx-auto
+        px-auto
+        py-1
+        my-1
+        flex
+        flex-wrap
+        flex-col
+        rounded
+        bg-blue-5
+        text-white
+        justify-center
+        items-start
+      >
         <div mx-auto>
           <div class="flex flex-row" justify-between>
             <div>电池电量: {{ status?.Battery.BatteryPercentage }} %</div>
@@ -352,7 +341,11 @@ onUnmounted(() => { });
 
         <ABtn class="m-3 text-sm btn" color="success" @click="call"> 呼叫 </ABtn>
 
-        <ABtn v-if="status && !status.IsSleep" class="m-3 text-sm btn" @click="showSleepDialog = true">
+        <ABtn
+          v-if="status && !status.IsSleep"
+          class="m-3 text-sm btn"
+          @click="showSleepDialog = true"
+        >
           睡眠模式
         </ABtn>
       </div>
@@ -363,9 +356,22 @@ onUnmounted(() => { });
         <div id="videobox" ref="videobox" shadow-sm w-auto md:w-md></div>
       </div>
 
-      <iframe frameborder="yes" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=7821822508&auto=0&height=90"></iframe>
+      <iframe
+        frameborder="yes"
+        border="0"
+        marginwidth="0"
+        marginheight="0"
+        width="330"
+        height="110"
+        src="//music.163.com/outchain/player?type=0&id=7821822508&auto=0&height=90"
+      ></iframe>
 
-      <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
+      <ABtn
+        class="my-3 text-sm btn"
+        rounded-2xl
+        color="warning"
+        @click="showDialog = true"
+      >
         打赏
       </ABtn>
 
