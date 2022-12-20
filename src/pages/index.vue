@@ -25,7 +25,7 @@ const showSleepDialog = ref(false);
 
 const serverURL = "https://icepie.singzer.cn";
 
-const hlsUrl = "https://pvio.cn:2022";
+const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
@@ -110,13 +110,16 @@ player.on('DanmakuSend', (opts: BulletOption) => {
   console.log(opts)
 })
 
-const hls = new Hls();
 
-hls.attachMedia(player.video)
-
-hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-  hls.loadSource(hlsUrl)
-})
+if (player.video.canPlayType('application/vnd.apple.mpegurl')) {
+  player.video.src = hlsUrl
+} else if (Hls.isSupported()) {
+  const hls = new Hls();
+  hls.loadSource(hlsUrl);
+  hls.attachMedia(player.video);
+} else {
+  player.video.src = hlsUrl
+}
 
 const videobox = ref<HTMLDivElement | null>(null)
 if (getCurrentInstance()) {
@@ -306,7 +309,7 @@ onUnmounted(() => { });
     <div>
       <div text-xl text-blue-5 font-bold>功能正在开发中...</div>
 
-      <div v-if="!status" px-10 mx-auto w-sm py-1 my-1 flex flex-wrap flex-col rounded bg-green-5 text-white
+      <div v-if="!status" w-auto md:w-md mx-auto px-auto py-1 my-1 flex flex-wrap flex-col rounded bg-green-5 text-white
         justify-center items-center>
         <div font-bold>JOJO现在出去玩啦, 等他回家吧~</div>
 
@@ -360,6 +363,8 @@ onUnmounted(() => { });
       <div v-show="status">
         <div id="videobox" ref="videobox" shadow-sm w-auto md:w-md></div>
       </div>
+
+      <iframe frameborder="yes" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=7821822508&auto=0&height=90"></iframe>
 
       <ABtn class="my-3 text-sm btn" rounded-2xl color="warning" @click="showDialog = true">
         打赏
