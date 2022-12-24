@@ -22,7 +22,7 @@ const showDialog = ref(false);
 
 const showSleepDialog = ref(false);
 
-const serverURL = "https://icepie.singzer.cn";
+const serverURL = "https://waline.singzer.cn";
 
 const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
