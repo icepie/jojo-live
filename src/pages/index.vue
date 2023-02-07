@@ -26,6 +26,8 @@ const serverURL = "https://waline.singzer.cn";
 
 const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
+const miaoHlsUrl = "https://jojo-live.singzer.cn/live/miao.m3u8";
+
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
 let ws = new WebSocket(wsUrl);
@@ -69,7 +71,7 @@ const danmakuOptions = {
   autoInsert: true,
 };
 
-const player = new NPlayer({
+const jojoPlayer = new NPlayer({
   // settings: [],
   controls: [
     ["play", "spacer", "web-fullscreen", "fullscreen"],
@@ -89,7 +91,8 @@ const player = new NPlayer({
   //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
 });
 
-player.on("DanmakuSend", (opts: BulletOption) => {
+
+jojoPlayer.on("DanmakuSend", (opts: BulletOption) => {
   if (opts.isMe) {
     // 发送弹幕
     ws.send(
@@ -107,15 +110,49 @@ player.on("DanmakuSend", (opts: BulletOption) => {
 if (Hls.isSupported()) {
   const hls = new Hls();
   hls.loadSource(hlsUrl);
-  hls.attachMedia(player.video);
-} else if (player.video.canPlayType("application/vnd.apple.mpegurl")) {
-  player.video.src = hlsUrl;
+  hls.attachMedia(jojoPlayer.video);
+} else if (jojoPlayer.video.canPlayType("application/vnd.apple.mpegurl")) {
+  jojoPlayer.video.src = hlsUrl;
 }
 
-const videobox = ref<HTMLDivElement | null>(null);
+const videobox2 = ref<HTMLDivElement | null>(null);
 if (getCurrentInstance()) {
   onMounted(() => {
-    player.mount(unref(videobox) as HTMLDivElement);
+    jojoPlayer.mount(unref(videobox2) as HTMLDivElement);
+  });
+}
+
+const miaoPlayer = new NPlayer({
+  // settings: [],
+  controls: [
+    ["play", "spacer", "web-fullscreen", "fullscreen"],
+    ["progress"],
+    ["volume"],
+  ],
+  bpControls: {
+    650: [
+      ["play", "progress", "web-fullscreen", "fullscreen"],
+      ["volume"],
+    ],
+  },
+  live: true,
+  // poster:
+  //   "https://photo7n.gracg.com/uploadfile/photo/2017/9/pic_se9hmr4k5qsjl81soeav5nrfw74i60z6.jpg?imageMogr2/auto-orient/thumbnail/1200x/blur/1x0/quality/98",
+});
+
+
+if (Hls.isSupported()) {
+  const hls = new Hls();
+  hls.loadSource(miaoHlsUrl);
+  hls.attachMedia(miaoPlayer.video);
+} else if (miaoPlayer.video.canPlayType("application/vnd.apple.mpegurl")) {
+  miaoPlayer.video.src = miaoHlsUrl;
+}
+
+const videobox1 = ref<HTMLDivElement | null>(null);
+if (getCurrentInstance()) {
+  onMounted(() => {
+    miaoPlayer.mount(unref(videobox1) as HTMLDivElement);
   });
 }
 
@@ -248,19 +285,24 @@ onUnmounted(() => {});
       <a
         text-2xl
         rel="noreferrer"
-        href="https://github.com/antfu/vitesse-lite"
+        href="https://github.com/icepie"
         target="_blank"
       >
         JOJO
       </a>
     </p>
-    <p>
-      <em text-xl op75>我是一只快活的傻鸟</em>
-    </p>
 
     <p>
-      <em text-sm op75>想用我的可爱治愈你~</em>
+      <em text-xl op75>和神出鬼没的小猫</em>
     </p>
+
+    <!-- <p>
+      <em text-xl op75>我是一只快活的傻鸟</em>
+    </p> -->
+<!--
+    <p>
+      <em text-sm op75>想用我的可爱治愈你~</em>
+    </p> -->
 
     <div py-1 />
 
@@ -335,9 +377,9 @@ onUnmounted(() => {});
       </div>
 
       <div v-if="status">
-        <ABtn class="m-3 text-sm btn" color="info" @click="turnOnLight"> 开灯 </ABtn>
+        <!-- <ABtn class="m-3 text-sm btn" color="info" @click="turnOnLight"> 开灯 </ABtn>
 
-        <ABtn class="m-3 text-sm btn" color="info" @click="turnOffLight"> 关灯 </ABtn>
+        <ABtn class="m-3 text-sm btn" color="info" @click="turnOffLight"> 关灯 </ABtn> -->
 
         <ABtn class="m-3 text-sm btn" color="success" @click="call"> 呼叫 </ABtn>
 
@@ -353,7 +395,8 @@ onUnmounted(() => {});
 
     <div flex flex-col justify-center items-center px-auto mx-auto>
       <div v-show="status">
-        <div id="videobox" ref="videobox" shadow-sm w-auto md:w-md></div>
+        <div class="m-3" id="videobox1" ref="videobox1" shadow-sm w-auto md:w-md></div>
+        <div  class="m-3" id="videobox2" ref="videobox2" shadow-sm w-auto md:w-md></div>
       </div>
 
       <iframe
