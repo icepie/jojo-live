@@ -24,9 +24,9 @@ const showSleepDialog = ref(false);
 
 const serverURL = "https://waline.singzer.cn";
 
-const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
+const hlsUrl = "http://fit-office.singzer.cn:7002/live/jojo.m3u8";
 
-const miaoHlsUrl = "https://jojo-live.singzer.cn/live/miao.m3u8";
+const miaoHlsUrl = "http://fit-office.singzer.cn:7002/live/miao.m3u8";
 
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
