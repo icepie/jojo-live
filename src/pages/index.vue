@@ -2,6 +2,7 @@
 import NPlayer from "nplayer";
 import Danmaku from "@nplayer/danmaku";
 import { BulletOption } from "@nplayer/danmaku/dist/src/ts/danmaku/bullet";
+
 import Hls from "hls.js";
 // import Flv from "flv.js";
 // import NPlayer from "@nplayer/vue/";
@@ -24,9 +25,9 @@ const showSleepDialog = ref(false);
 
 const serverURL = "https://waline.singzer.cn";
 
-const hlsUrl = "https://fit-office.singzer.cn:7443/live/jojo.m3u8";
+const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
-const miaoHlsUrl = "https://fit-office.singzer.cn:7443/live/miao.m3u8";
+const miaoHlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
@@ -398,6 +399,8 @@ onUnmounted(() => {});
         <div class="m-3" id="videobox1" ref="videobox1" shadow-sm w-auto md:w-md></div>
         <div  class="m-3" id="videobox2" ref="videobox2" shadow-sm w-auto md:w-md></div>
       </div>
+
+      <vue-drawing-canvas ref="VueCanvasDrawing" />
 
       <iframe
         frameborder="yes"
