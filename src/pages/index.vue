@@ -27,7 +27,7 @@ const serverURL = "https://waline.singzer.cn";
 
 const hlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
 
-const miaoHlsUrl = "https://jojo-live.singzer.cn/live/jojo.m3u8";
+const miaoHlsUrl = "https://jojo-live.singzer.cn/live/miao.m3u8";
 
 const wsUrl = "wss://jojot.singzer.cn/ws";
 
@@ -396,8 +396,8 @@ onUnmounted(() => {});
 
     <div flex flex-col justify-center items-center px-auto mx-auto>
       <div v-show="status">
-        <div class="m-3" id="videobox1" ref="videobox1" shadow-sm w-auto md:w-md></div>
         <div  class="m-3" id="videobox2" ref="videobox2" shadow-sm w-auto md:w-md></div>
+        <div class="m-3" id="videobox1" ref="videobox1" shadow-sm w-auto md:w-md></div>
       </div>
 
       <vue-drawing-canvas ref="VueCanvasDrawing" />
