@@ -148,6 +148,7 @@ if (Hls.isSupported()) {
   hls.attachMedia(miaoPlayer.video);
 } else if (miaoPlayer.video.canPlayType("application/vnd.apple.mpegurl")) {
   miaoPlayer.video.src = miaoHlsUrl;
+  jojoPlayer.video.src = hlsUrl;
 }
 
 const videobox1 = ref<HTMLDivElement | null>(null);
